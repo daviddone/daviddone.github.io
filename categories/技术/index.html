@@ -65,6 +65,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-三方组件之个推消息中心" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/25/三方组件之个推消息中心/" class="article-date">
+  <time datetime="2015-11-25T15:42:42.000Z" itemprop="datePublished">2015-11-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/25/三方组件之个推消息中心/">三方组件之个推消息中心</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Step_1：注册账号：">Step 1：注册账号：</h2><p>并创建应用个推消息中心，填写包名，会生成AppID，AppKey，AppSecret，MasterSecret。这些参数在App端和服务器端都需要用到。注意；千万不要copy错了。</p>
+<h2 id="Step_2:下载SDK和demo">Step 2:下载SDK和demo</h2><p><a href="http://docs.getui.com/pages/viewpage.action?pageId=589866" target="_blank" rel="external">http://docs.getui.com/pages/viewpage.action?pageId=589866</a></p>
+<h2 id="Step_3:_运行demo；">Step 3: 运行demo；</h2><p>需要修改AndroidManifest.xml和主Activity中的；<br>AppID AppKey AppSecret  MasterSecret</p>
+<h2 id="Step_4：原理：">Step 4：原理：</h2><p>在个推中，有两种推送方式，第一种是”通知栏”，第二种是”透传测试”，通知栏发送的相关通知会在Notification中提示，<br>“透传测试”的相关消息是用来App开发做逻辑判断的，不会在Notification中提示。</p>
+<h2 id="Step_5：打造自己的消息中心；">Step 5：打造自己的消息中心；</h2><p>需求：商户端，确认上门服务。用户端，收到上门服务消息。<br>由于针对具体某一个用户进行推送，这里需要用到个推的绑定别名功能，这里笔者采用绑定userId的方式：</p>
+<h3 id="Android端自定义消息中心">Android端自定义消息中心</h3><h3 id="主要代码和注意事项">主要代码和注意事项</h3><p>清单文件中，配置权限,注意在Application标签之外：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- &#20010;&#25512;&#26435;&#38480;&#24320;&#22987;HA&#28040;&#24687;&#20013;&#24515; begin--&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.CHANGE_WIFI_STATE&#34; /&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.WAKE_LOCK&#34; /&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.RECEIVE_BOOT_COMPLETED&#34; /&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.VIBRATE&#34; /&#62;&#10;     &#60;!-- &#25903;&#25345;iBeancon &#38656;&#35201;&#34013;&#29273;&#26435;&#38480; --&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.BLUETOOTH&#34; /&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.BLUETOOTH_ADMIN&#34; /&#62;&#10;    &#60;!-- &#28014;&#21160;&#36890;&#30693;&#26435;&#38480; --&#62;&#10;    &#60;uses-permission android:name=&#34;android.permission.SYSTEM_ALERT_WINDOW&#34; /&#62;&#10;    &#60;!-- &#33258;&#23450;&#20041;&#26435;&#38480; --&#62;&#10;    &#60;uses-permission android:name=&#34;getui.permission.GetuiService.com.sunroads.ha&#34; /&#62;&#10;    &#60;permission&#10;        android:name=&#34;getui.permission.GetuiService.com.sunroads.ha&#34;&#10;        android:protectionLevel=&#34;normal&#34; &#62;&#10;    &#60;/permission&#62;&#10;    &#60;!-- &#20010;&#25512;&#26435;&#38480;&#24320;&#22987;HA&#28040;&#24687;&#20013;&#24515;end --&#62;</span><br></pre></td></tr></table></figure></p>
+<p>配置AppID，AppKey，AppSecret，MasterSecret和相关Service和Receiver：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- HA&#28040;&#24687;&#20013;&#24515;&#24320;&#22987; --&#62;&#10;       &#60;!-- HA&#39033;&#30446;&#28040;&#24687;activity&#24320;&#22987; --&#62;&#10;       &#60;activity android:name=&#34;com.sunroads.ha.mess.MessageActivity&#34;&#10;           android:launchMode=&#34;singleTop&#34; &#62;&#10;       &#60;/activity&#62;&#10;        &#60;activity android:name=&#34;com.sunroads.ha.mess.MessageCenterActivity&#34;&#10;          &#62;&#60;/activity&#62;&#10;       &#60;!-- HA&#39033;&#30446;&#28040;&#24687;&#20013;&#24515;activity&#32467;&#26463; --&#62;&#10;&#10;&#10;       &#60;!-- &#20010;&#25512;SDK&#37197;&#32622;&#24320;&#22987; --&#62;&#10;       &#60;!-- &#37197;&#32622;&#30340;&#31532;&#19977;&#26041;&#21442;&#25968;&#23646;&#24615; --&#62;&#10;       &#60;meta-data&#10;           android:name=&#34;PUSH_APPID&#34;&#10;           android:value=&#34;YraKcwpCc79wVvqMqFr4J&#34; /&#62;&#10;       &#60;meta-data&#10;           android:name=&#34;PUSH_APPKEY&#34;&#10;           android:value=&#34;ltdZhjdMrc6ExM1ba3cSnA&#34; /&#62;&#10;       &#60;meta-data&#10;           android:name=&#34;PUSH_APPSECRET&#34;&#10;           android:value=&#34;CIKxU6ULWb8xuCrNWHdkK9&#34; /&#62;&#10;&#10;       &#60;!-- HA&#28040;&#24687;&#20013;&#24515;Receiver --&#62;&#10;       &#60;receiver&#10;           android:name=&#34;com.sunroads.ha.mess.PushDemoReceiver&#34;&#10;           android:exported=&#34;false&#34; &#62;&#10;           &#60;intent-filter&#62;&#10;               &#60;action android:name=&#34;com.igexin.sdk.action.YraKcwpCc79wVvqMqFr4J&#34; /&#62;&#10;           &#60;/intent-filter&#62;&#10;       &#60;/receiver&#62;&#10;&#10;       &#60;!-- HA&#28040;&#24687;&#20013;&#24515;&#37197;&#32622;SDK&#26680;&#24515;&#26381;&#21153; --&#62;&#10;       &#60;service&#10;           android:name=&#34;com.igexin.sdk.PushService&#34;&#10;           android:exported=&#34;true&#34;&#10;           android:label=&#34;NotificationCenter&#34;&#10;           android:process=&#34;:pushservice&#34; &#62;&#10;       &#60;/service&#62;&#10;       &#60;service&#10;           android:name=&#34;com.igexin.sdk.PushServiceUser&#34;&#10;           android:exported=&#34;true&#34;&#10;           android:label=&#34;NotificationCenterUser&#34; &#62;&#10;       &#60;/service&#62;&#10;&#10;       &#60;receiver android:name=&#34;com.igexin.sdk.PushReceiver&#34; &#62;&#10;           &#60;intent-filter&#62;&#10;               &#60;action android:name=&#34;android.intent.action.BOOT_COMPLETED&#34; /&#62;&#10;               &#60;action android:name=&#34;android.net.conn.CONNECTIVITY_CHANGE&#34; /&#62;&#10;               &#60;action android:name=&#34;android.intent.action.USER_PRESENT&#34; /&#62;&#10;               &#60;action android:name=&#34;com.igexin.sdk.action.refreshls&#34; /&#62;&#10;               &#60;!-- &#20197;&#19979;&#19977;&#39033;&#20026;&#21487;&#36873;&#30340;action&#22768;&#26126;&#65292;&#21487;&#22823;&#22823;&#25552;&#39640;service&#23384;&#27963;&#29575;&#21644;&#28040;&#24687;&#21040;&#36798;&#36895;&#24230; --&#62;&#10;               &#60;action android:name=&#34;android.intent.action.MEDIA_MOUNTED&#34; /&#62;&#10;               &#60;action android:name=&#34;android.intent.action.ACTION_POWER_CONNECTED&#34; /&#62;&#10;               &#60;action android:name=&#34;android.intent.action.ACTION_POWER_DISCONNECTED&#34; /&#62;&#10;           &#60;/intent-filter&#62;&#10;       &#60;/receiver&#62;&#10;       &#60;receiver&#10;           android:name=&#34;com.igexin.sdk.PushManagerReceiver&#34;&#10;           android:exported=&#34;false&#34; &#62;&#10;           &#60;intent-filter&#62;&#10;               &#60;action android:name=&#34;com.igexin.sdk.action.pushmanager&#34; /&#62;&#10;           &#60;/intent-filter&#62;&#10;       &#60;/receiver&#62;&#10;&#10;       &#60;activity&#10;           android:name=&#34;com.igexin.sdk.PushActivity&#34;&#10;           android:excludeFromRecents=&#34;true&#34;&#10;           android:exported=&#34;false&#34;&#10;           android:process=&#34;:pushservice&#34;&#10;           android:taskAffinity=&#34;com.igexin.sdk.PushActivityTask&#34;&#10;           android:theme=&#34;@android:style/Theme.Translucent.NoTitleBar&#34; &#62;&#10;       &#60;/activity&#62;&#10;&#10;       &#60;service&#10;           android:name=&#34;com.igexin.download.DownloadService&#34;&#10;           android:process=&#34;:pushservice&#34; /&#62;&#10;&#10;       &#60;receiver android:name=&#34;com.igexin.download.DownloadReceiver&#34; &#62;&#10;           &#60;intent-filter&#62;&#10;               &#60;action android:name=&#34;android.net.conn.CONNECTIVITY_CHANGE&#34; /&#62;&#10;           &#60;/intent-filter&#62;&#10;       &#60;/receiver&#62;&#10;&#10;       &#60;provider&#10;           android:name=&#34;com.igexin.download.DownloadProvider&#34;&#10;&#9;&#9;android:exported=&#34;true&#34;&#10;           android:authorities=&#34;downloads.com.sunroads.ha&#34;&#10;           android:process=&#34;:pushservice&#34; /&#62;&#10;&#10;       &#60;activity&#10;           android:name=&#34;com.igexin.getuiext.activity.GetuiExtActivity&#34;&#10;           android:configChanges=&#34;orientation|keyboard|keyboardHidden&#34;&#10;           android:excludeFromRecents=&#34;true&#34;&#10;           android:exported=&#34;false&#34;&#10;           android:process=&#34;:pushservice&#34;&#10;           android:taskAffinity=&#34;android.task.myServicetask&#34;&#10;           android:theme=&#34;@android:style/Theme.Translucent.NoTitleBar&#34; /&#62;&#10;&#10;       &#60;receiver&#10;           android:name=&#34;com.igexin.getuiext.service.PayloadReceiver&#34;&#10;           android:exported=&#34;false&#34; &#62;&#10;           &#60;intent-filter&#62;&#10;               &#60;action android:name=&#34;com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4&#34; /&#62;&#10;               &#60;action android:name=&#34;com.igexin.sdk.action.YraKcwpCc79wVvqMqFr4J&#34; /&#62;&#10;           &#60;/intent-filter&#62;&#10;       &#60;/receiver&#62;&#10;&#10;       &#60;service&#10;           android:name=&#34;com.igexin.getuiext.service.GetuiExtService&#34;&#10;           android:process=&#34;:pushservice&#34; /&#62;&#10;&#10;       &#60;!-- HA&#28040;&#24687;&#20013;&#24515;&#20010;&#25512;SDK&#37197;&#32622;&#32467;&#26463; --&#62;</span><br></pre></td></tr></table></figure></p>
+<p>lib包和so(armeabi)包都需要copy进去；<br>Src代码中的核心模块：<br>首先需要初始化个推和绑定别名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boolean bind =  PushManager.getInstance().bindAlias(GetuiSdkDemoActivity.this, alias);&#10;&#36890;&#36807;ClientId&#26144;&#23556;&#32465;&#23450;&#29992;&#25143;&#21517;&#31216;&#65306;</span><br></pre></td></tr></table></figure></p>
+<h3 id=":服务器端业务逻辑中增加推送：">:服务器端业务逻辑中增加推送：</h3><h4 id="引入jar包">引入jar包</h4><h4 id="使用pushtoSingle类，我对其进行了封装之后，直接可以调用静态方法，传入别名和推送消息内容即可。">使用pushtoSingle类，我对其进行了封装之后，直接可以调用静态方法，传入别名和推送消息内容即可。</h4><h4 id="在三方服务器业务逻辑推送节点，加入推送代码，就一行，够简单吧。">在三方服务器业务逻辑推送节点，加入推送代码，就一行，够简单吧。</h4><p>pushtoSingle.pushToSingle(info,alias1);//参数1：推送的信息字符串，如“维修师傅已出发”，参数二为推送别名，暂定为userId<br>绑定之后根据别名来发送消息：<br><a href="http://docs.igetui.com/pages/viewpage.action?pageId=590469" target="_blank" rel="external">http://docs.igetui.com/pages/viewpage.action?pageId=590469</a></p>
+<h2 id="Step_6:将接收到的消息展现到消息中心">Step 6:将接收到的消息展现到消息中心</h2><p>个推的客户端消息接收机制是BroadcastReceiver，这里在广播接受的onReceive方法中获取到推送收到的详情。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">byte[] payload = bundle.getByteArray(&#34;payload&#34;);&#10;String data = new String(payload);&#10;Log.d(&#34;&#25509;&#25910;&#21040;&#30340;&#28040;&#24687;&#34;, &#34;receiver payload : &#34; + data);</span><br></pre></td></tr></table></figure></p>
+<p>收到消息之后，将数据存入到数据库中，然后标记为未读状态，等到点击之后，标记为已读状态。</p>
+<h2 id="问题">问题</h2><p>最好将推送机制放在服务器端，如果App分为用户端和商户端，根据Android系统机制，包名需要不同。包名不同就会导致绑定的三方推送平台AppKey等不同。<br>ClientId没有生成？<br>    没有联网的情况，ClientId是无法生成的。<br>ClientId安装一次就会生成一次，需要绑定别名才能使用？<br>是的。<br>能够收到通知，但是透传消息无法推送？<br>Android端的清单文件中的AppId,AppKey一定不要填错了，注意AppId将会填写多次，在清单文件中receiver标签appId写错之后，透传消息不能够推送到Android应用中。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/" data-id="cihezdu45000snwuz2ymfdhdn" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-三方组件之高德地图" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/19/三方组件之高德地图/" class="article-date">
@@ -106,14 +175,14 @@
 <p>注意还需要绑定地图拖动事件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aMap.setOnCameraChangeListener(this);// &#23545;amap&#28155;&#21152;&#31227;&#21160;&#22320;&#22270;&#20107;&#20214;&#30417;&#21548;&#22120;</span><br></pre></td></tr></table></figure></p>
 <h2 id="高德地图之POI（周边搜索）">高德地图之POI（周边搜索）</h2><p>通过调用高德POI(Point Of interest_兴趣点)，会根据传入关键词，搜索出附近的兴趣点地址列表，如：酒店，餐饮，学校。我们可以参考com.amap.map3d.demo.poisearch.PoiKeywordSearchActivity.java案例，首先需要实现OnPoiSearchListener接口。实现接口中的方法，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Override&#10;&#9;public void onPoiItemDetailSearched(PoiItemDetail arg0, int arg1) &#123;&#10;&#9;&#9;// TODO Auto-generated method stub&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#9;public void onPoiSearched(PoiResult result, int rCode) &#123;&#10;&#9;&#9;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>我在这里封装了一个方法，每一次需要周边搜索的时候，直接调用即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private PoiSearch.Query query;// Poi&#26597;&#35810;&#26465;&#20214;&#31867;&#10;/**&#10;&#9; * &#24320;&#22987;&#36827;&#34892;poi&#25628;&#32034;&#10;&#9; */&#10;&#9;protected void doSearchQuery() &#123;&#10;&#9;&#9;showProgressDialog();// &#26174;&#31034;&#36827;&#24230;&#26694;&#10;&#9;&#9;currentPage = 0;&#10;&#9;&#9;query = new PoiSearch.Query(keyWord, &#34;&#34;, editCity.getText().toString());// &#31532;&#19968;&#20010;&#21442;&#25968;&#34920;&#31034;&#25628;&#32034;&#23383;&#31526;&#20018;&#65292;&#31532;&#20108;&#20010;&#21442;&#25968;&#34920;&#31034;poi&#25628;&#32034;&#31867;&#22411;&#65292;&#31532;&#19977;&#20010;&#21442;&#25968;&#34920;&#31034;poi&#25628;&#32034;&#21306;&#22495;&#65288;&#31354;&#23383;&#31526;&#20018;&#20195;&#34920;&#20840;&#22269;&#65289;&#10;&#9;&#9;query.setPageSize(10);// &#35774;&#32622;&#27599;&#39029;&#26368;&#22810;&#36820;&#22238;&#22810;&#23569;&#26465;poiitem&#10;&#9;&#9;query.setPageNum(currentPage);// &#35774;&#32622;&#26597;&#31532;&#19968;&#39029;&#10;&#10;&#9;&#9;poiSearch = new PoiSearch(this, query);&#10;&#9;&#9;poiSearch.setOnPoiSearchListener(this);&#10;&#9;&#9;poiSearch.searchPOIAsyn();&#10;&#9;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>调用完毕之后，高德的数据会通过onPoiSearched回调接口返回，通过result.getPois()可以获取到PoiItem列表，POiItem实体类中包含了经纬度，城市，地址等信息。这个时候，我们可以将PoiItem集合获取按照需求做出各种不同的展现，这里将他通过ListView展示出来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void onPoiSearched(PoiResult result, int rCode) &#123;&#10;&#9;ArrayList&#60;PoiItem&#62; lists = result.getPois();&#10;&#9;&#9;PoiItem poiItem = lists.get(0);&#10;&#9;&#9;String Address = poiItem.getProvinceName()+poiItem.getCityName()+poiItem.getDirection()+poiItem.getAdName();&#9;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用完毕之后，高德的数据会通过onPoiSearched回调接口返回，通过result.getPois()可以获取到PoiItem列表，POiItem实体类中包含了经纬度，城市，地址等信息（建议查看<a href="http://lbs.amap.com/Public/reference/AMap_Android_Api_Doc_V3.0_20150914/" target="_blank" rel="external">参考手册</a>）。这个时候，我们可以将PoiItem集合获取按照需求做出各种不同的展现，这里将他通过ListView展示出来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void onPoiSearched(PoiResult result, int rCode) &#123;&#10;&#9;ArrayList&#60;PoiItem&#62; lists = result.getPois();&#10;&#9;&#9;PoiItem poiItem = lists.get(0);&#10;&#9;&#9;String Address = poiItem.getProvinceName()+poiItem.getCityName()+poiItem.getDirection()+poiItem.getAdName();&#9;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>到此周边搜索功能就实现了。接下来实现的是，全国各种大厦，住宅楼的检索功能。</p>
 <h2 id="高德地图之云搜索:">高德地图之云搜索:</h2><h2 id="高德地图之移动大头针：">高德地图之移动大头针：</h2><p><a href="http://lbs.amap.com/api/android-sdk/summary/" target="_blank" rel="external">官方文档链接</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cih64at90000ocsuzezk2c5aq" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cihezdu3r000onwuzxb6g119d" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/19/三方组件之高德地图/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -173,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cih64at7i0000csuzpklg7vd2" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cihezdu2e0000nwuzzh4kdl42" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/11/更新/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -240,7 +309,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cih64at8h000fcsuzfslac2q9" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cihezdu3d000fnwuzu1fs1vzj" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/09/12/屏幕适配/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -300,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cih64at96000scsuz30ncj7pf" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cihezdu4a000wnwuzv1v2kvdw" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -388,7 +457,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cih64at9d000ycsuz8c925vnv" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cihezdu4j0012nwuzcp1xobdb" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -475,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cih64at870007csuzjydu78wb" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cihezdu340007nwuzhmejwf5u" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -511,7 +580,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/Translation/">Translation</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Android/">Android</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/Translation/">Translation</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">7</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Android/">Android</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -520,7 +589,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/">Translation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/">Translation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -538,7 +607,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -548,6 +617,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/11/25/三方组件之个推消息中心/">三方组件之个推消息中心</a>
+          </li>
         
           <li>
             <a href="/2015/11/19/三方组件之高德地图/">三方组件之高德地图</a>
@@ -563,10 +636,6 @@
         
           <li>
             <a href="/2015/10/13/如何掌握英文/">如何掌握英文</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/12/屏幕适配/">Android 屏幕适配</a>
           </li>
         
       </ul>
