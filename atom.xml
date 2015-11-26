@@ -4,7 +4,7 @@
   <subtitle><![CDATA[If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward...]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.daviddone.com/"/>
-  <updated>2015-11-25T15:43:20.369Z</updated>
+  <updated>2015-11-26T10:57:30.586Z</updated>
   <id>http://www.daviddone.com/</id>
   
   <author>
@@ -13,6 +13,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[如何在广播接受者中调用显示通知栏]]></title>
+    <link href="http://www.daviddone.com/2015/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8%E5%B9%BF%E6%92%AD%E6%8E%A5%E5%8F%97%E8%80%85%E4%B8%AD%E8%B0%83%E7%94%A8%E6%98%BE%E7%A4%BA%E9%80%9A%E7%9F%A5%E6%A0%8F/"/>
+    <id>http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/</id>
+    <published>2015-11-26T10:52:40.000Z</published>
+    <updated>2015-11-26T10:57:30.586Z</updated>
+    <content type="html"><![CDATA[<h2 id="原理">原理</h2><p>广播接受者不能直接显示通知栏，只有Activity和Service能够开启通知，要想调用通知栏需要将转移到Service和Activity中，一般直接转移到Service中。</p>
+<h2 id="实现">实现</h2><p>将广播接受器获得的数据传递到Service中；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Override &#10;    public void onReceive(Context context, Intent intent) &#123;  &#10;        // TODO Auto-generated method stub  &#10;        //&#24403;&#24191;&#25773;&#25509;&#25910;&#22120;&#25509;&#25910;&#21040;&#24191;&#25773;&#28040;&#24687;&#26102;&#65292;&#23558;&#24320;&#21551;&#19968;&#20010;Service&#10;        Intent notifyIntent=new Intent();  &#10;        notifyIntent.setAction(&#34;SERVICE_NOTIFY&#34;);  &#10;            context.startService(i);  &#10;                     &#10;    &#125;  &#9;&#9;&#10;```&#9;&#10;&#22312;Service&#20013;&#21551;&#21160;&#26174;&#31034;&#36890;&#30693;&#26639;&#65292;&#24182;&#23454;&#29616;&#28857;&#20987;&#36890;&#30693;&#26639;&#19978;&#36890;&#30693;&#36339;&#36716;&#21040;&#25351;&#23450;Activity&#20013;&#65306;</span><br></pre></td></tr></table></figure></p>
+<p>public class NotifyService extends Service{</p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function">IBinder <span class="title">onBind</span><span class="params">(Intent arg0)</span> </span>{
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent, <span class="keyword">int</span> flags, <span class="keyword">int</span> startId)</span> </span>{
+</code></pre><p>//        return super.onStartCommand(intent, flags, startId);<br>        String title = intent.getStringExtra(“message”);<br>        initService();<br>        showIntentActivityNotify(title);<br>        return 0;<br>    }<br>    NotificationCompat.Builder mBuilder;<br>    int notifyId = 100;<br>    public void showIntentActivityNotify(String title){<br>        // Notification.FLAG_ONGOING_EVENT –设置常驻 Flag;Notification.FLAG_AUTO_CANCEL 通知栏上点击此通知后自动清除此通知<br>//        notification.flags = Notification.FLAG_AUTO_CANCEL; //在通知栏上点击此通知后自动清除此通知<br>        mBuilder = new NotificationCompat.Builder(this);<br>        mBuilder.setAutoCancel(true)//点击后让通知将消失<br>                .setContentTitle(“此处设置标题”)<br>                .setContentText(“此处设置内容”)<br>                .setTicker(“点击进入”)<br>                .setDefaults(Notification.DEFAULT_VIBRATE)<br>                .setSmallIcon(R.drawable.icon_logo);<br>        //点击的意图ACTION是跳转到Intent<br>        Intent resultIntent = new Intent(this, MessageCenterActivity.class);<br>        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);<br>        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);<br>        mBuilder.setContentIntent(pendingIntent);<br>        mNotificationManager.notify(notifyId, mBuilder.build());<br>    }<br>    public NotificationManager mNotificationManager;<br>    private void initService() {<br>        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#27880;&#20876;Service:</span><br></pre></td></tr></table></figure></p>
+<p>  <service android:name="com.sunroads.ha.service.NotifyService"><br>             <intent-filter><br>               <action android:name="SERVICE_NOTIFY"><br>           </action></intent-filter><br>        </service><br>```</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="原理">原理</h2><p>广播接受者不能直接显示通知栏，只有Activity和Service能够开启通知，要想调用通知栏需要将转移到Service和Activity中，一般直接转移到Service中。</p>
+<h2 id="实现">实现</h2><p>将广播接]]>
+    </summary>
+    
+      <category term="Android" scheme="http://www.daviddone.com/tags/Android/"/>
+    
+      <category term="技术" scheme="http://www.daviddone.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="Android" scheme="http://www.daviddone.com/categories/%E6%8A%80%E6%9C%AF/Android/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[三方组件之个推消息中心]]></title>
