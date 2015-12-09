@@ -42,7 +42,7 @@
     <link href="http://www.daviddone.com/2015/11/25/%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E4%B9%8B%E4%B8%AA%E6%8E%A8%E6%B6%88%E6%81%AF%E4%B8%AD%E5%BF%83/"/>
     <id>http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/</id>
     <published>2015-11-25T15:42:42.000Z</published>
-    <updated>2015-12-07T09:59:23.521Z</updated>
+    <updated>2015-12-07T10:07:54.536Z</updated>
     <content type="html"><![CDATA[<h2 id="效果图">效果图</h2><p><img src="/images/message_center.jpg" alt=""></p>
 <h2 id="Step_1：注册账号：">Step 1：注册账号：</h2><p>注册账号并创建应用个推消息中心，填写包名，会生成AppID，AppKey，AppSecret，MasterSecret。这些参数在App端和服务器端都需要用到。注意；千万不要copy错了。</p>
 <h2 id="Step_2:下载SDK和demo">Step 2:下载SDK和demo</h2><p><a href="http://docs.getui.com/pages/viewpage.action?pageId=589866" target="_blank" rel="external">http://docs.getui.com/pages/viewpage.action?pageId=589866</a></p>
@@ -78,8 +78,8 @@
     <link href="http://www.daviddone.com/2015/11/19/%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE/"/>
     <id>http://www.daviddone.com/2015/11/19/三方组件之高德地图/</id>
     <published>2015-11-19T09:10:19.000Z</published>
-    <updated>2015-11-20T02:54:57.469Z</updated>
-    <content type="html"><![CDATA[<p>高德2D地图实现饿了么订餐地址选择</p>
+    <updated>2015-12-09T09:24:50.734Z</updated>
+    <content type="html"><![CDATA[<p>高德2D地图实现云搜索功能，效果图如下：</p>
 <h2 id="获取SHA1与Package">获取SHA1与Package</h2><p>Windows：依次在 eclipse 中打开 Window -&gt; Preferances -&gt; Android -&gt; Build。<br>然后选择SHA1：18:F2:AA:4B:CD:FC:9D:BC:B8:64:0D:5D:4A:06:CA:E1:B9:EA:A5:A7</p>
 <p>修改manifest文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:name=&#34;com.amap.api.v2.apikey&#34;&#10;android:value=&#34;22cf23dc41d089037032898817f4f4f2&#34;</span><br></pre></td></tr></table></figure></p>
 <p>即可</p>
@@ -99,8 +99,8 @@
 <h2 id="高德地图之云搜索:">高德地图之云搜索:</h2><h2 id="高德地图之移动大头针：">高德地图之移动大头针：</h2><p><a href="http://lbs.amap.com/api/android-sdk/summary/" target="_blank" rel="external">官方文档链接</a></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>高德2D地图实现饿了么订餐地址选择</p>
-<h2 id="获取SHA1与Package">获取SHA1与Package</h2><p>Windows：依次在 eclipse 中打开 Window -&gt; Preferances -&gt; Android -&gt; ]]>
+    <![CDATA[<p>高德2D地图实现云搜索功能，效果图如下：</p>
+<h2 id="获取SHA1与Package">获取SHA1与Package</h2><p>Windows：依次在 eclipse 中打开 Window -&gt; Preferances -&gt; Android -&g]]>
     </summary>
     
       <category term="Android" scheme="http://www.daviddone.com/tags/Android/"/>
