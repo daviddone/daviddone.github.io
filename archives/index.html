@@ -65,6 +65,69 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-采用lint清除无必要的res资源文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/12/采用lint清除无必要的res资源文件/" class="article-date">
+  <time datetime="2015-12-12T02:17:15.000Z" itemprop="datePublished">2015-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/12/采用lint清除无必要的res资源文件/">采用Lint清除无必要的res资源文件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Lint作为Android官方提供的代码扫描工具，能够帮助我们识别代码结构存在的问题，如res资源文件下有哪些资源从未被使用，如无效布局，多重嵌套等问题。在项目的后期，我们一般会使用Lint来审查以下代码，看看项目还有哪些可以改进的地方，此处笔者介绍一下，在项目中使用Lint工具寻找到未使用的图片，并编写自动化批量处理代码，对图片进行删除。</p>
+<h3 id="Step_1：Android自带lint工具目录">Step 1：Android自带lint工具目录</h3><p>D:\android\adt-bundle-windows2\adt-bundle-windows-x86_64-20130917\sdk\tools</p>
+<h3 id="Step_2：命令行使用Lint工具">Step 2：命令行使用Lint工具</h3><p>编写命令行代码，将Lint执行并把执行完毕的结果放在res.txt文件中，代码格式为：lint 工程目录 &gt;d:/Temp/res.txt<br>如：lint D:\androidJob\HA_User &gt;d:/Temp/res.txt 。</p>
+<h3 id="Step_3:_代码删除未使用资源文件">Step 3: 代码删除未使用资源文件</h3><p>根据res.txt文件分析需要删除的文件，然后编写IO操作代码进行批量删除（自定义Lint删除项目文件）。注意:请先对要删除的文件做备份处理，最好以一个最小的文件夹为单位进行删除操作，删除完毕之后，刷新项目项目看看项目有没有报错。如没有则可提交SVN。以下是批量处理res.txt文件代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;public static void deleteUnUsed() throws IOException &#123;&#10;&#9;&#9;String projectPath = &#34;D:\\androidJob\\Test_Project\\&#34;;&#10;&#9;&#9;BufferedReader reader = new BufferedReader(new FileReader(&#34;D:/temp/res.txt&#34;));&#10;&#9;&#9;String line;&#10;&#9;&#9;int count = 0;&#10;&#9;&#9;while((line = reader.readLine()) != null) &#123;&#10;&#9;&#9;&#9;//if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; !line.contains(&#34;res\\values&#34;) &#38;&#38; !line.contains(&#34;appcompat&#34;)) &#123;&#10;&#9;&#9;&#9;//&#28165;&#38500;&#25351;&#23450;&#30340;&#25991;&#20214; res\layout&#10;&#9;&#9;&#9;if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; line.contains(&#34;res\\drawable&#34;)&#38;&#38;!line.contains(&#34;umeng&#34;))&#123;&#10;&#9;&#9;        count++;&#10;&#9;&#9;        int end = line.indexOf(&#34;:&#34;);&#10;&#9;&#9;        if (end != -1)&#123;&#10;&#9;&#9;            String file = line.substring(0, end);&#10;&#9;&#9;            String f = projectPath +file;&#10;&#9;&#9;            System.out.println(f);&#10;//&#9;&#9;            if(f.contains(&#34;sy_opinion&#34;))&#123;&#10;//&#9;&#9;            &#9;new File(f).delete();&#10;//&#9;&#9;            &#125;&#10;&#9;&#9;            new File(f).delete();&#10;&#9;&#9;        &#125;&#10;&#9;&#9;    &#125;&#10;&#9;&#9;&#125;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure>
+<p>可以根据上诉代码实现，对单个文件，文件夹，多个文件夹等删除资源文件的操作。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/12/12/采用lint清除无必要的res资源文件/" data-id="cijb0e69q0000s8uzz6671p3d" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/12/12/采用lint清除无必要的res资源文件/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-如何在广播接受者中调用显示通知栏" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/26/如何在广播接受者中调用显示通知栏/" class="article-date">
@@ -98,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/" data-id="cihyqy3ow000oiwuz5ynr3x9f" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/" data-id="cijb0e6bg000ss8uzg1n9cjf2" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -162,7 +225,7 @@
 <p>lib包和so(armeabi)包都需要copy进去；<br>Src代码中的核心模块：<br>首先需要初始化个推和绑定别名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boolean bind =  PushManager.getInstance().bindAlias(GetuiSdkDemoActivity.this, alias);&#10;&#36890;&#36807;ClientId&#26144;&#23556;&#32465;&#23450;&#29992;&#25143;&#21517;&#31216;&#65306;</span><br></pre></td></tr></table></figure></p>
 <h3 id="服务器端业务逻辑中增加推送：">服务器端业务逻辑中增加推送：</h3><h4 id="引入jar包">引入jar包</h4><h4 id="使用pushtoSingle类，我对其进行了封装之后，直接可以调用静态方法，传入别名和推送消息内容即可。">使用pushtoSingle类，我对其进行了封装之后，直接可以调用静态方法，传入别名和推送消息内容即可。</h4><h4 id="在三方服务器业务逻辑推送节点，加入推送代码，就一行，够简单吧。">在三方服务器业务逻辑推送节点，加入推送代码，就一行，够简单吧。</h4><p>pushtoSingle.pushToSingle(info,alias1);//参数1：推送的信息字符串，如“维修师傅已出发”，参数二为推送别名，暂定为userId<br>绑定之后根据别名来发送消息，具体可查看<a href="http://docs.igetui.com/pages/viewpage.action?pageId=590469" target="_blank" rel="external">绑定别名</a></p>
 <h2 id="Step_6:将接收到的消息展现到消息中心">Step 6:将接收到的消息展现到消息中心</h2><p>个推的客户端消息接收机制是BroadcastReceiver，这里在广播接受的onReceive方法中获取到推送收到的详情。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">byte[] payload = bundle.getByteArray(&#34;payload&#34;);&#10;String data = new String(payload);&#10;Log.d(&#34;&#25509;&#25910;&#21040;&#30340;&#28040;&#24687;&#34;, &#34;receiver payload : &#34; + data);</span><br></pre></td></tr></table></figure></p>
-<p>收到消息之后，将数据存入到数据库中，然后标记为未读状态，等到点击之后，标记为已读状态。</p>
+<p>收到消息之后，将数据存入到数据库中，然后标记为未读状态，同时需要开启一个NotifyService用来开启一个通知栏提示，原因是在BroadcastReceiver中不能够直接使用通知栏提示。等到点击之后，标记为已读状态。</p>
 <h2 id="问题">问题</h2><p>最好将推送机制放在服务器端，如果App分为用户端和商户端，根据Android系统机制，包名需要不同。包名不同就会导致绑定的三方推送平台AppKey等不同。</p>
 <h4 id="ClientId没有生成？">ClientId没有生成？</h4><pre><code>没有联网的情况，ClientId是无法生成的。
 </code></pre><p>ClientId安装一次就会生成一次，需要绑定别名才能使用？<br>是的。</p>
@@ -171,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/" data-id="cihyqy3pa000wiwuzhc0kaed9" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/" data-id="cijb0e6bs0010s8uz1cpal7ou" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -247,7 +310,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cihyqy3p4000siwuzjq4d5kof" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cijb0e6bl000ws8uz6ztb9smu" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/19/三方组件之高德地图/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -307,7 +370,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cihyqy3nf0000iwuz01rwjmxc" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cijb0e6af0007s8uzhwvbdaez" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/11/更新/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -375,13 +438,13 @@
 <li>一个应用程序可以申请获取设备数据,如用户的联系人，短信，挂载存储设备(SD卡)，摄像头,蓝牙,以及其它更多的设备数据。所有的App权限需要在用户安装是授予。<br>以上包含了Android应用程序在系统中存在的相关基础知识。接下来的文档将会介绍:</li>
 <li>定义你的App的核心框架组件。</li>
 <li>为应用申明组件以及相关设备功能的清单文件（manifest）。</li>
-<li>与App代码分离开来的资源文件夹（Resources），它允许App为一系列的设备配置优化它的行为。<h3 id="应用组件">应用组件</h3>应用程序组件是一个Android应用程序的基本构建模块，每个组件都是系统可以进入App的不同入口，并不是所有的组件都为用户实际的入口，有一写相互依赖，但是每一个都以自己的实体存在着并扮演一个特定角色 。每一个都是帮助定义应用程序的整体行为的独立构建模块。<br>总共有四种不同类型的应用程序组件。每种类型有不同的目的，有着定义组件如何创建和销毁的生命周期。<br>下列是四种应用程序组件:<h4 id="Activities（活动）">Activities（活动）</h4>一个Activity代表拥有单一屏幕的用户界面。例如，一个email应用程序可能拥有一个activity展示新邮件列表，另一个activity用来撰写Email，还有一个用来阅读email。尽管Activities相互协作，构成一个有凝聚力的用户体验，但是每一个都是独立存在。例如，不同的App能够启动这些Activities的任何一个（email应用允许的话）。例如，一个相机应用能够开启每个Email应用中撰写新邮件的Activity，这样来确保用户来分享一张图片。<br>一个activity作为Activity的子类实现，你能在Activities的开发指南中了解更多。<h4 id="Services（服务）">Services（服务）</h4>服务是一个在后台运行的组件,用来进行长时间运行的操作，抑或为远程进程工作。服务不提供用户界面，例如,一个服务可能在后台播放音乐，然后用户使用的是不同的应用程序，或许，它在不需要阻止用户正在进行的一个Activity的交互就能够通过网络获取数据。另一个组件,比如activity，可以通过可以开始服务,让它运行，抑或添加绑定来与之交互。<br>service是作为Service的一个子类实现,你可以在service的官方文档中了解更多。<h4 id="Content_providers（内容提供者）">Content providers（内容提供者）</h4>内容提供者管理一组共享App数据，你可以将数据存储在文件中，sqlite数据库，网络，或App能够访问的任何存储设备。通过内容提供者，其它应用程序可以查询或甚至修改数据（如果内容提供者允许它）。例如,Android系统提供了一个内容提供者来管理用户的联系人信息。因此,任何拥有适当的权限可以查询内容提供商的一部分（(如ContactsContract.Data)）来进行一个特定联系人的读写信息操作。<br>内容提供商也用于读写 那些App私有，不能分享的相关数据。例如,记事本示例应用程序就使用一个内容提供者来保存笔记。<h4 id="Broadcast_receivers（广播接受者）">Broadcast receivers（广播接受者）</h4>广播接收者是一个响应系统级范围的广播通知的组件。很多广播都来源于系统，例如屏幕关闭会发送广播，电池低会发送广播,或者照片被捕获也会发送广播。应用程序也可以启动广播，例如，可以用来——广播告知有些数据被下载到了设备上，通知它们可以被使用了。虽然广播接收器不显示用户界面，但是他们可以创建一个状态栏通知，用来提醒用户广播事件已发生了。更常见的,一个广播接收器是作为其他组件通道，被安排只做很小的工作`。例如，他可能初始化一个Service，Service在此基础上执行更多的操作。<br>广播接受者通过集成BroadcastReceiver实现，每个广播作为一个Intent对象传递。更多相关信息,请参见BroadcastReceiver类。<br>Android系统设计的一个独特之处在于任何应用程序都可以启动另一个应用程序的组件。例如,如果您希望用户通过摄像头获取一张照片。可能其他App有这个功能，你的App就可以使用，而不是，自己开发一个Acitvity来拍照。你不需要合并，甚至连相机应用程序的代码都不需要引用。而是，简单的开启相机应用中的一个Activity来获取一张照片。当完成之后，图片将会返回自己的App这样你就能够使用它了。对用户而言，好像相机功能实际上是本App的一部分一样。<br>当系统启动一个组件，它会开启App的进程（如果它不是正在运行），初始化组件所需要的类。如果你的App启动相机应用的Acitvity来获取照片，在进程中所执行的Activity属于相机应用程序，而不属于你本身的App，这一点不想大多数其他系统上的应用程序。Android应用程序没有单一的入口点(没有Main函数)。<br>因为系统把每个应用程序单独的运行在一个拥有文件权限的独立进程中，严格限制访问其他应用程序,应用程序不能直接激活另一个应用程序的组件。而Android系统是可以在这么做的。因此为了激活另一个应用程序的组件,您必须提供为系统发送一个消息,指定开启特定的组件的intent。然后系统为你激活的组件。<h3 id="激活组件">激活组件</h3>四大组件中的3个，activities, services, and broadcast receivers都是通过叫做Intent的异步消息所激活的。Intent在运行时将各个组件相互绑定（你可以把Intents当作从其他组件请求的动作的使者`），无论是属于自己App的组件还是其他的应用的组件。<br>Intent由一个Intent对象创建，它定义了激活其他指定控件或者一种特定类型的组件——Intent可以分别是显示的，或者是隐式的。</li>
+<li>与App代码分离开来的资源文件夹（Resources），它允许App为一系列的设备配置优化它的行为。<h3 id="应用组件">应用组件</h3>应用程序组件是一个Android应用程序的基本构建模块，每个组件都是系统可以进入App的不同入口，并不是所有的组件都为用户实际的入口，有一写相互依赖，但是每一个都以自己的实体存在着并扮演一个特定角色 。每一个都是帮助定义应用程序的整体行为的独立构建模块。<br>总共有四种不同类型的应用程序组件。每种类型有不同的目的，有着定义组件如何创建和销毁的生命周期。<br>下列是四种应用程序组件:<h4 id="Activities（活动）">Activities（活动）</h4>一个Activity代表拥有单一屏幕的用户界面。例如，一个email应用程序可能拥有一个activity展示新邮件列表，另一个activity用来撰写Email，还有一个用来阅读email。尽管Activities相互协作，构成一个有凝聚力的用户体验，但是每一个都是独立存在。例如，不同的App能够启动这些Activities的任何一个（email应用允许的话）。例如，一个相机应用能够开启每个Email应用中撰写新邮件的Activity，这样来确保用户来分享一张图片。<br>一个activity作为Activity的子类实现，你能在Activities的开发指南中了解更多。<h4 id="Services（服务）">Services（服务）</h4>服务是一个在后台运行的组件,用来进行长时间运行的操作，抑或为远程进程工作。服务不提供用户界面，例如,一个服务可能在后台播放音乐，然后用户使用的是不同的应用程序，或许，它在不需要阻止用户正在进行的一个Activity的交互就能够通过网络获取数据。另一个组件,比如activity，可以通过可以开始服务,让它运行，抑或添加绑定来与之交互。<br>service是作为Service的一个子类实现,你可以在service的官方文档中了解更多。<h4 id="Content_providers（内容提供者）">Content providers（内容提供者）</h4>内容提供者管理一组共享App数据，你可以将数据存储在文件中，sqlite数据库，网络，或App能够访问的任何存储设备。通过内容提供者，其它应用程序可以查询或甚至修改数据（如果内容提供者允许它）。例如,Android系统提供了一个内容提供者来管理用户的联系人信息。因此,任何拥有适当的权限可以查询内容提供商的一部分（(如ContactsContract.Data)）来进行一个特定联系人的读写信息操作。<br>内容提供商也用于读写 那些App私有，不能分享的相关数据。例如,记事本示例应用程序就使用一个内容提供者来保存笔记。<h4 id="Broadcast_receivers（广播接受者）">Broadcast receivers（广播接受者）</h4>广播接收者是一个响应系统级范围的广播通知的组件。很多广播都来源于系统，例如屏幕关闭会发送广播，电池低会发送广播,或者照片被捕获也会发送广播。应用程序也可以启动广播，例如，可以用来——广播告知有些数据被下载到了设备上，通知它们可以被使用了。虽然广播接收器不显示用户界面，但是他们可以创建一个状态栏通知，用来提醒用户广播事件已发生了。更常见的,一个广播接收器是作为其他组件通道，被安排只做很小的工作`。例如，他可能初始化一个Service，Service在此基础上执行更多的操作。<br>广播接受者通过集成BroadcastReceiver实现，每个广播作为一个Intent对象传递。更多相关信息,请参见BroadcastReceiver类。<br>Android系统设计的一个独特之处在于任何应用程序都可以启动另一个应用程序的组件。例如,如果您希望用户通过摄像头获取一张照片。可能其他App有这个功能，你的App就可以使用，而不是，自己开发一个Acitvity来拍照。你不需要合并，甚至连相机应用程序的代码都不需要引用。而是，简单的开启相机应用中的一个Activity来获取一张照片。当完成之后，图片将会返回自己的App这样你就能够使用它了。对用户而言，好像相机功能实际上是本App的一部分一样。<br>当系统启动一个组件，它会开启App的进程（如果它不是正在运行），初始化组件所需要的类。如果你的App启动相机应用的Acitvity来获取照片，在进程中所执行的Activity属于相机应用程序，而不属于你本身的App，这一点不想大多数其他系统上的应用程序。Android应用程序没有单一的入口点(没有Main函数)。<br>因为系统把每个应用程序单独的运行在一个拥有文件权限的独立进程中，严格限制访问其他应用程序,应用程序不能直接激活另一个应用程序的组件。而Android系统是可以在这么做的。因此为了激活另一个应用程序的组件,您必须提供为系统发送一个消息,指定开启特定的组件的intent。然后系统为你激活的组件。<h3 id="激活组件">激活组件</h3>四大组件中的3个，activities, services, and broadcast receivers都是通过叫做Intent的异步消息所激活的。Intent在运行时将各个组件相互绑定（你可以把Intents当作从其他组件请求的动作的使者`），无论是属于自己App的组件还是其他的应用的组件。<br>Intent由一个Intent对象创建，它定义了激活其他指定控件或者一种特定类型的组件——Intent可以分别是显示的，或者是隐式的。<br>对于activities和services，一个intent定义了用来执行的动作（如，到”视图”和发送）并有可能指定数据的URI来执行任务（被开启的组件可能需要被知道一些其他的信息）。例如,一个意图可能传达请求一个活动来显示一个图像或打开一个网页</li>
 </ul>
 <h2 id="(持续翻译中)">(持续翻译中)</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/22/Guides/" data-id="cihyqy3q2001biwuz6c76l4u6" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/22/Guides/" data-id="cijb0e6cm001fs8uzolal7gho" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/22/Guides/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -444,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="cihyqy3ol000jiwuz72lp0g3f" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="cijb0e6b8000ns8uzmnwpzc8j" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/13/如何掌握英文/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -509,7 +572,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cihyqy3of000fiwuz5ihmgnb3" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cijb0e6b2000js8uzcxzwvpke" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/09/12/屏幕适配/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -569,7 +632,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cihyqy3pg0010iwuzcp385jiu" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cijb0e6c70014s8uzpgktjt6e" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -657,7 +720,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cihyqy3pt0016iwuzk9fauaaw" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cijb0e6ch001as8uz4f5jclgp" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -684,93 +747,10 @@
 
 
   
-    <article id="post-搭建博客" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/10/搭建博客/" class="article-date">
-  <time datetime="2015-06-10T02:12:34.000Z" itemprop="datePublished">2015-06-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Hexo/">Hexo</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/10/搭建博客/">使用Github搭建Hexo博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="目录">目录</h3><p></p><p><br>    1：Hexo简介<br>    2：Hexo在本地安装<br>    3：Github分配博客项目空间<br>    4：发布Hexo到Github上<br>    5：绑定个性化域名<br>    6：个性化配置<br>    7：使用MD创建第一篇博客<br>    8：问题与结论<br></p><p></p>
-<h2 id="1：Hexo简介">1：Hexo简介</h2><p><img src="/images/hexo_info.png" alt=""></p>
-<p></p><p><br>Hexo是一款轻量级的静态博客框架，基于Node.js 。截止目前，在Github该项目的star数量已经超过6000,由此可见其受欢迎的程度。<a href="https://hexo.io/" target="_blank" rel="external">Hexo的官网</a>，通过简约醒目的风格向我们展现了使用Hexo的原因。Blazing Fast，Markdown Support，One-Command Deployment，Various Plugins。由于Github拥有支持Node和Markdown的Github pages服务，所以我们可以在Github上便捷的搭建免费的hexo博客站点。<br></p><p></p>
-<h2 id="2：Hexo在本地安装">2：Hexo在本地安装</h2><p>在本地搭建Hexo博客需要先安装Git和Node.js。笔者采用的是windowx64，所以下载<a href="https://git-for-windows.github.io/" target="_blank" rel="external">windows版Git</a>即可,然后下载安装<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>  即可。下面进入Hexo在本地搭建环节。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>在本地磁盘下新建Hexo文件夹，如（D:\Hexo），点击右键，选择Git bush，然后执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure></p>
-<p>会得到hexo博客需要的所有目录文件。</p>
-<h3 id="安装依赖包">安装依赖包</h3><p>执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
-<h3 id="生成博客与部署：">生成博客与部署：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate&#10;hexo server</span><br></pre></td></tr></table></figure>
-<p>执行hexo server之后，会有如下提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure></p>
-<p>则通过本地IP采用127.0.0.1：4000即可访问。如下图，则表示本地安装成功：<br><img src="/images/hexo_install_success.png" alt=""></p>
-<h2 id="3：Github分配博客项目空间">3：Github分配博客项目空间</h2><p>在自己Github主页右下角，创建一个新的repository。命名规则username.github.io;注意username更换为自己的github账号，如笔者的新repository为daviddone.github.io。<br><img src="/images/hexo_github.png" alt=""></p>
-<h2 id="4：发布Hexo到github上">4：发布Hexo到github上</h2><p>编辑_config.yml （D:\Hexo中）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deploy:&#10;  type: git&#10;  repository: git@github.com:daviddone/daviddone.github.io.git&#10;  branch: master</span><br></pre></td></tr></table></figure></p>
-<p>请注意：repository必须填写SSH的路径，不能填写：<br><a href="https://github.com/daviddone/daviddone.github.io.git" target="_blank" rel="external">https://github.com/daviddone/daviddone.github.io.git</a><br>执行下列指令，可完成部署<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate&#10;ssh -T git@github.com&#10;hexo deploy</span><br></pre></td></tr></table></figure></p>
-<h2 id="5：绑定个性化域名">5：绑定个性化域名</h2><h3 id="DNS服务商设置：">DNS服务商设置：</h3><p><img src="/images/hexo_dns1.png" alt=""><br><img src="/images/hexo_dns2.png" alt=""></p>
-<h3 id="域名服务商万网设置：">域名服务商万网设置：</h3><p><img src="/images/hexo_cname.png" alt=""><br>修改完毕之后查看域名信息确认,如下：<br><img src="/images/hexo_cname_confirm.png" alt=""></p>
-<h3 id="GitHub和Hexo设置:">GitHub和Hexo设置:</h3><p>在D:\Hexo\source新建文件名CNAME文件,然后编辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">www.daviddone.com</span><br></pre></td></tr></table></figure></p>
-<p>然后更新Github，会发现在repository的根目录下会出现CNAME文件夹</p>
-<p>注意域名解析有一定的延迟，等到生效时，访问www.daviddone.com即可查看，Github博客已与域名绑定。至此，博客的简单搭建完毕。</p>
-<h2 id="6：个性化配置">6：个性化配置</h2><h3 id="自定义网站主题：">自定义网站主题：</h3><p>克隆喜欢的主题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ppoffice/hexo-theme-hueman.git themes/hueman</span><br></pre></td></tr></table></figure></p>
-<p>在_config.yml中配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Extensions &#25193;&#23637;&#65306;&#25554;&#20214;&#21644;&#30382;&#32932;&#10;## Plugins: http://hexo.io/plugins/&#10;## Themes: http://hexo.io/themes/&#10;theme: hueman</span><br></pre></td></tr></table></figure></p>
-<h3 id="Disqus评论系统">Disqus评论系统</h3><p>访问<a href="http://disqus.com/" target="_blank" rel="external">Disqus官网</a>,申请一个shortname,然后填写到_config.yml中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disqus_shortname: daviddone</span><br></pre></td></tr></table></figure></p>
-<p>具体操作如下，进入Disqus后台后：<br><img src="/images/hexo_add_discuss.png" alt=""><br>选择 add disqus to site，<br>如下填写相关信息，Disqus会生成代码Universal code<br><img src="/images/hexo_create_discuss_a.png" alt=""><br>将代码拷贝到：D:\Hexo\themes\hueman\layout_partial\artical.ejs中，拷贝范围如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;% if (post.comments &#38;&#38; config.disqus_shortname)&#123; %&#62;&#10;        &#60;a href=&#34;&#60;%- post.permalink %&#62;#disqus_thread&#34; class=&#34;article-comment-link&#34;&#62;Comments&#60;/a&#62;&#10;&#60;!-- begin--&#62;&#9;&#9;&#10;&#60;div id=&#34;disqus_thread&#34;&#62;&#60;/div&#62;&#10;&#60;script type=&#34;text/javascript&#34;&#62;&#10;    /* * * CONFIGURATION VARIABLES * * */&#10;    var disqus_shortname = &#39;daviddone&#39;;&#10;    &#10;    /* * * DON&#39;T EDIT BELOW THIS LINE * * */&#10;    (function() &#123;&#10;        var dsq = document.createElement(&#39;script&#39;); dsq.type = &#39;text/javascript&#39;; dsq.async = true;&#10;        dsq.src = &#39;//&#39; + disqus_shortname + &#39;.disqus.com/embed.js&#39;;&#10;        (document.getElementsByTagName(&#39;head&#39;)[0] || document.getElementsByTagName(&#39;body&#39;)[0]).appendChild(dsq);&#10;    &#125;)();&#10;&#60;/script&#62;&#10;&#60;noscript&#62;Please enable JavaScript to view the &#60;a href=&#34;https://disqus.com/?ref_noscript&#34; rel=&#34;nofollow&#34;&#62;comments powered by Disqus.&#60;/a&#62;&#60;/noscript&#62;&#10;&#60;!--end--&#62;&#10;&#60;% &#125; %&#62;&#10;&#60;%- partial(&#39;post/tag&#39;) %&#62;</span><br></pre></td></tr></table></figure></p>
-<p>同时也可使用国内多说评论系统，可以<a href="http://dev.duoshuo.com/threads/541d3b2b40b5abcd2e4df0e9" target="_blank" rel="external">参考教材</a></p>
-<h3 id="RSS订阅插件">RSS订阅插件</h3><p>执行如下代码，安装插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure></p>
-<h2 id="7:_使用MD创建第一篇博客：">7: 使用MD创建第一篇博客：</h2><p>执行命令创建文章：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &#25645;&#24314;&#21338;&#23458;</span><br></pre></td></tr></table></figure></p>
-<p>在D:\Hexo\source_posts目录下出现 搭建博客.md 文件，然后以MarkDown语法编辑文章。编辑完毕之后，执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
-<p>查看效果<br>介绍文章语法：<br>生成.md文件之后，每篇文章文首添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title: &#25645;&#24314;&#21338;&#23458;&#10;date: 2015-10-10 10:12:34&#10;tags:&#10;- &#26631;&#35760;&#19968; &#10;- &#26631;&#35760;&#20108;&#10;categories:&#10;- &#20998;&#31867;&#19968;&#10;- &#20998;&#31867;&#20108;&#10;---</span><br></pre></td></tr></table></figure></p>
-<p>接下来就可以写正文,正文遵循MarkDown语法，可参考其<a href="https://guides.github.com/features/mastering-markdown" target="_blank" rel="external">MD官方教材</a></p>
-<h2 id="8:_问题与结论">8: 问题与结论</h2><p>1：部署的时候出现错误：<br><img src="/images/hexo_error1.png" alt=""><br>原因：将repository中的SSH路径写为了Https路径。<br>2:初次使用请配置SSH keys<br>参考<a href="https://help.github.com/articles/generating-ssh-keys/" target="_blank" rel="external">官方教材</a><br>配置完毕之后，在每次push之前执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
-<p>即可获取权限</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cihyqy3o60007iwuztwhi3z9i" class="article-share-link">Share</a>
-      
-        <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
-	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'daviddone';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo教材/">Hexo教材</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标记二/">标记二</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
+    </nav>
   
 </section>
         
@@ -780,7 +760,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/Translation/">Translation</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Android/">Android</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/Translation/">Translation</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Android/">Android</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -789,7 +769,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/">Translation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/">Translation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -807,7 +787,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -817,6 +797,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/12/12/采用lint清除无必要的res资源文件/">采用Lint清除无必要的res资源文件</a>
+          </li>
         
           <li>
             <a href="/2015/11/26/如何在广播接受者中调用显示通知栏/">如何在广播接受者中调用显示通知栏</a>
@@ -834,10 +818,6 @@
             <a href="/2015/11/11/更新/">Android SDK 镜像更新</a>
           </li>
         
-          <li>
-            <a href="/2015/10/22/Guides/">Android API Guides</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -850,7 +830,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 daviddone<br>
+      &copy; 2016 daviddone<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
