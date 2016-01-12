@@ -95,13 +95,13 @@
 <h3 id="Step_1：Android自带lint工具目录">Step 1：Android自带lint工具目录</h3><p>D:\android\adt-bundle-windows2\adt-bundle-windows-x86_64-20130917\sdk\tools</p>
 <h3 id="Step_2：命令行使用Lint工具">Step 2：命令行使用Lint工具</h3><p>编写命令行代码，将Lint执行并把执行完毕的结果放在res.txt文件中，代码格式为：lint 工程目录 &gt;d:/Temp/res.txt<br>如：lint D:\androidJob\HA_User &gt;d:/Temp/res.txt 。</p>
 <h3 id="Step_3:_代码删除未使用资源文件">Step 3: 代码删除未使用资源文件</h3><p>根据res.txt文件分析需要删除的文件，然后编写IO操作代码进行批量删除（自定义Lint删除项目文件）。注意:请先对要删除的文件做备份处理，最好以一个最小的文件夹为单位进行删除操作，删除完毕之后，刷新项目项目看看项目有没有报错。如没有则可提交SVN。以下是批量处理res.txt文件代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void deleteUnUsed() throws IOException &#123;&#10;&#9;String projectPath = &#34;D:\\androidJob\\Test_Project\\&#34;;&#10;&#9;BufferedReader reader = new BufferedReader(new FileReader(&#34;D:/temp/res.txt&#34;));&#10;&#9;String line;&#10;&#9;int count = 0;&#10;&#9;while((line = reader.readLine()) != null) &#123;&#10;&#9;&#9;//if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; !line.contains(&#34;res\\values&#34;) &#38;&#38; !line.contains(&#34;appcompat&#34;)) &#123;&#10;&#9;&#9;//&#28165;&#38500;&#25351;&#23450;&#30340;&#25991;&#20214; res\layout&#10;&#9;&#9;if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; line.contains(&#34;res\\drawable&#34;)&#38;&#38;!line.contains(&#34;umeng&#34;))&#123;&#10;&#9;        count++;&#10;&#9;        int end = line.indexOf(&#34;:&#34;);&#10;&#9;        if (end != -1)&#123;&#10;&#9;            String file = line.substring(0, end);&#10;&#9;            String f = projectPath +file;&#10;&#9;            System.out.println(f);&#10;&#9;            //if(f.contains(&#34;sy_opinion&#34;))&#123;&#10;&#9;            //&#9; new File(f).delete();&#10;&#9;            //&#125;&#10;&#9;            new File(f).delete();&#10;&#9;        &#125;&#10;&#9;    &#125;&#10;&#9;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void deleteUnUsed() throws IOException &#123;&#10;&#9;String projectPath = &#34;D:\\androidJob\\Test_Project\\&#34;;&#10;&#9;BufferedReader reader = new BufferedReader(new FileReader(&#34;D:/temp/res.txt&#34;));&#10;&#9;String line;&#10;&#9;int count = 0;&#10;&#9;while((line = reader.readLine()) != null) &#123;&#10;&#9;&#9;//if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; !line.contains(&#34;res\\values&#34;) &#38;&#38; !line.contains(&#34;appcompat&#34;)) &#123;&#10;&#9;&#9;// &#28165;&#38500;&#25351;&#23450;&#30340;&#25991;&#20214; res\layout&#10;&#9;&#9;if (line.contains(&#34;UnusedResources&#34;) &#38;&#38; line.contains(&#34;res\\drawable&#34;)&#38;&#38;!line.contains(&#34;umeng&#34;))&#123;&#10;&#9;        count++;&#10;&#9;        int end = line.indexOf(&#34;:&#34;);&#10;&#9;        if (end != -1)&#123;&#10;&#9;            String file = line.substring(0, end);&#10;&#9;            String f = projectPath +file;&#10;&#9;            System.out.println(f);&#10;&#9;            //if(f.contains(&#34;sy_opinion&#34;))&#123;&#10;&#9;            //&#9; new File(f).delete();&#10;&#9;            //&#125;&#10;&#9;            new File(f).delete();&#10;&#9;        &#125;&#10;&#9;    &#125;&#10;&#9;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>可以根据上诉代码实现，对单个文件，文件夹，多个文件夹等删除资源文件的操作。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/12/12/采用lint清除无必要的res资源文件/" data-id="cijb11ldi0000zkuzukoxw1ol" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/12/12/采用lint清除无必要的res资源文件/" data-id="cijb1mzls0000u4uz8l2cor97" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/12/12/采用lint清除无必要的res资源文件/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -161,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/" data-id="cijb11lf3000szkuzfbfyplh4" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/" data-id="cijb1mzng000su4uzezvjsomw" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/26/如何在广播接受者中调用显示通知栏/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -234,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/" data-id="cijb11lfi0010zkuzgk51j8n6" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/" data-id="cijb1mznx0010u4uzb5gx67l6" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/25/三方组件之个推消息中心/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -310,7 +310,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cijb11lfb000wzkuz7juw4ba9" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/19/三方组件之高德地图/" data-id="cijb1mznr000wu4uz2ap4h44s" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/19/三方组件之高德地图/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -370,7 +370,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cijb11le60007zkuzsql36ldl" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/11/11/更新/" data-id="cijb1mzmf0007u4uzlcgdsuvd" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/11/11/更新/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -437,7 +437,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cijb11lem000jzkuz7ii0468v" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/09/12/屏幕适配/" data-id="cijb1mzmw000ju4uzxzxdf8n4" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/09/12/屏幕适配/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -497,7 +497,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cijb11lfv0014zkuzkj46hhnb" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cijb1mzo30014u4uzsow9u4fo" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -585,7 +585,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cijb11lg9001azkuzm7j04ecd" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cijb1mzod001au4uze66yrrhd" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -672,7 +672,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cijb11lee000bzkuzm21ek99y" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cijb1mzmn000bu4uz7jrktspt" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
