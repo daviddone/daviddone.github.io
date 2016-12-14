@@ -112,7 +112,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwoo417k000ro8uz0suum2re" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwooc7te000rkguzxvjn9ia2" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -182,7 +182,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoo41830010o8uzusf6h21b" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwooc7tz0010kguzit993eza" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -286,7 +286,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoo418b0015o8uzfg6qpwpf" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwooc7ui0015kguz11u6ipxu" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -340,8 +340,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="前提条件">前提条件</h2><p>redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make</p>
-<h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis </p>
-<h2 id="编译安装：">编译安装：</h2><p>make<br>make install</p>
+<h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis<br>make &amp;&amp; make install #编译安装</p>
 <h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件</p>
 <pre><code>daemonize <span class="literal">yes</span> （<span class="literal">no</span>-<span class="function">-&gt;</span><span class="literal">yes</span>） <span class="comment"># 仅需要修改</span>
 requirepass foobared <span class="comment"># 将其注释去掉,foobared即为密码</span>
@@ -351,14 +350,15 @@ requirepass foobared <span class="comment"># 将其注释去掉,foobared即为�
 <pre><code>&gt;<span class="keyword">set</span> <span class="property">name</span> david
 OK
 &gt;<span class="keyword">get</span> <span class="property">name</span>
-</code></pre><p>“david”<br>查看数据条数<br>    dbsize<br>退出客户端<br>    exit<br>通过客户端关闭redis<br>    redis-cli shutdown<br>    redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
+<span class="string">"david"</span>
+</code></pre><p>查看数据条数<br>    dbsize<br>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
 <h3 id="redis开机自启动配置">redis开机自启动配置</h3><p>echo “/usr/local/bin/redis-server /etc/redis/redis.conf &amp;” &gt;&gt; /etc/rc.local<br>注意：开机启动要配置在 rc.local 中，而 /etc/profile 文件，要有用户登录了，才会被执行。</p>
 <h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoo418l0019o8uz7hjrxclp" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwooc7uw0019kguzqyqhwlrn" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -437,7 +437,7 @@ OK
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoo4175000ko8uzlnx06j6n" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwooc7t0000kkguz7qqxvj52" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -530,7 +530,7 @@ OK
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoo417v000wo8uzo9q96v0r" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwooc7tp000wkguzl5w0heob" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -617,7 +617,7 @@ OK
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwoo415e0000o8uzdgq5egru" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwooc7ri0000kguzvwif5ihg" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
