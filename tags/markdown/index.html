@@ -99,7 +99,7 @@
 <h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>    localhost   # 保留master主机的localhost，使其同时作为datanode。<br>    david<br>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
 <h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
 <h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver</p>
-<p>jps验证集群　<br>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
+<h3 id="6_jps验证集群">6 jps验证集群　</h3><p>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
 <p>slave节点的服务：<br>4086 Jps<br>3812 DataNode<br>3927 NodeManager<br>注意：如果出现could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) ，这种情况是集群没能够搭建成功。删除掉hdfs工作数据文件，进行格式化之后hdfs namenode -format，重新启动，检查master节点是否有datanode，必须要有datanode。</p>
 <h2 id="集群的hdfs的使用">集群的hdfs的使用</h2><p>hdfs dfs -put /home/a.log hdfs://master:9000/   #将文件a.log 上传到hdfs上去。hdfs dfs命令也可以采用hadoop fs进行替换，在hadoop1.x中使用hadoop fs命令进行操作<br>hdfs dfs -ls /     #查看hdfs的所有目录, 或 hadoop fs -ls hdfs://master:9000/<br>hdfs dfs -mkdir -p /user/hadoop/david/test  #创建文件<br>hdfs dfs -mkdir -p /user/hadoop</p>
 <p>可通过web ui查看:  <a href="http://192.168.1.10:50070" target="_blank" rel="external">http://192.168.1.10:50070</a>   # 需要关闭防火墙  service firewalld stop<br><img src="/images/hadoop_cluster1.png" alt="图片"></p>
@@ -108,7 +108,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoi0mup000v6cuz5ilet066" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoi9586000v24uz33hgyd4r" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -212,7 +212,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoi0muy00106cuzad8ffcca" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoi958d001024uzb6c5bq40" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -291,7 +291,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoi0mu5000k6cuz3hlva3ns" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoi957i000k24uzd25gmgyz" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -384,7 +384,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoi0mui000r6cuzalj9z6j4" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoi957w000r24uz3imcj19b" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
