@@ -101,7 +101,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="ciwoqgan50009fkuzti3grr0m" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="ciwor4fim0009x8uzyz3xs4ga" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/13/如何掌握英文/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -159,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="ciwoqganh000efkuzclqwsfmm" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="ciwor4fiy000ex8uz2tdaddpv" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -233,7 +233,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwoqgaoa000rfkuzpey2itto" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwor4fjv000rx8uz6vnhhx28" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -303,7 +303,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoqgaoq0010fkuzk1zo7mds" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwor4fke0010x8uzdv0vhafv" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -407,7 +407,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoqgap50015fkuzzqzukamd" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwor4fku0015x8uzp5ce3l7s" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -462,9 +462,10 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
         <h2 id="前提条件">前提条件</h2><p>对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make<br>如果使用Centos 7,可采用 yum install redis 直接安装。</p>
 <h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis<br>make &amp;&amp; make install #编译安装</p>
-<h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件<br>    daemonize yes （no–&gt;yes）    #默认以后台程序方式运行</p>
-<pre><code><span class="preprocessor"># bind <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>   # 注释掉绑定本地，支持远程访问。或可以绑定指定访问ip白名单。</span>
-requirepass foobared <span class="preprocessor"># 将其注释去掉,foobared即为密码</span>
+<h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件</p>
+<pre><code>daemonize <span class="literal">yes</span> （<span class="literal">no</span>-<span class="function">-&gt;</span><span class="literal">yes</span>）    <span class="comment">#默认以后台程序方式运行</span>
+<span class="comment"># bind 127.0.0.1   # 注释掉绑定本地，支持远程访问。或可以绑定指定访问ip白名单。</span>
+requirepass foobared <span class="comment"># 将其注释去掉,foobared即为密码</span>
 </code></pre><p>配置密码（可选，远程连接和集群建议）：requirepass foobared # 将其注释去掉,foobared即为密码<br>或在客户端命令行中，设置密码：config set requirepass foobared 查看密码：config get requirepass</p>
 <h2 id="启动redis">启动redis</h2><p>/usr/local/bin/redis-server /etc/redis/redis.conf<br>重启：service redis restart # 在源码安装方式下无效<br>查看启动<br>ps -ef | grep redis     # 其运行的端口号为6379</p>
 <p>##使用redis-cli客户端<br>redis-cli  # 启动命令<br>设置密码之后使用密码登录：<br>redis-cli -h 127.0.0.1 -p 6379 -a foobared 或者：redis-cli -a foobared </p>
@@ -479,12 +480,13 @@ redis_version:<span class="number">2.8</span><span class="number">.19</span>
 redis_git_sha1:<span class="number">00000000</span>
 </code></pre><p>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
 <h3 id="redis开机自启动配置">redis开机自启动配置</h3><p>echo “/usr/local/bin/redis-server /etc/redis/redis.conf &amp;” &gt;&gt; /etc/rc.local<br>注意：开机启动要配置在 rc.local 中，而 /etc/profile 文件，要有用户登录了，才会被执行。</p>
-<h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop<br>注意：远程无法访问redis，主要原因就是redis.conf配置文件中绑定了ip或者防火墙端口号的问题。</p>
+<h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop</p>
+<p>注意：远程无法访问redis，主要原因就是redis.conf配置文件中绑定了ip或者防火墙端口号的问题。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoqgapi0019fkuznzyzrc49" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwor4flc0019x8uzu8cq3b8w" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -563,7 +565,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoqgans000kfkuzi7z90f8c" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwor4fje000kx8uzblmlwf7w" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -656,7 +658,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoqgaok000wfkuz4epdwqd6" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwor4fk4000wx8uzyykef29a" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -743,7 +745,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwoqgam00000fkuzeq0mfv89" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwor4fhn0000x8uzfve1xzk9" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
