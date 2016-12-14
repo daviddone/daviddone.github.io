@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Centos 6.x 安装Redis | David Done 博客</title>
+  <title>Centos 6.x 安装Redis 源码编译 | David Done 博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前提条件redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make
-官网下载redis源码curl http://download.redis.io/releases/redis-3.0.4.tar.gz -o redis-3.0.4.tar.">
+  <meta name="description" content="前提条件对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make如果使用Centos 7,可采用 yum install redis 直接安装。
+官网下载redis源码curl http://download.redis.io/releases/">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Centos 6.x 安装Redis">
+<meta property="og:title" content="Centos 6.x 安装Redis 源码编译">
 <meta property="og:url" content="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/index.html">
 <meta property="og:site_name" content="David Done 博客">
-<meta property="og:description" content="前提条件redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make
-官网下载redis源码curl http://download.redis.io/releases/redis-3.0.4.tar.gz -o redis-3.0.4.tar.">
-<meta property="og:updated_time" content="2016-12-14T08:27:25.646Z">
+<meta property="og:description" content="前提条件对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make如果使用Centos 7,可采用 yum install redis 直接安装。
+官网下载redis源码curl http://download.redis.io/releases/">
+<meta property="og:updated_time" content="2016-12-14T08:43:22.329Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Centos 6.x 安装Redis">
-<meta name="twitter:description" content="前提条件redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make
-官网下载redis源码curl http://download.redis.io/releases/redis-3.0.4.tar.gz -o redis-3.0.4.tar.">
+<meta name="twitter:title" content="Centos 6.x 安装Redis 源码编译">
+<meta name="twitter:description" content="前提条件对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。如果没有安装过 GCC 和 Make，使用 yum 安装。yum install -y gcc make如果使用Centos 7,可采用 yum install redis 直接安装。
+官网下载redis源码curl http://download.redis.io/releases/">
   
     <link rel="alternative" href="/atom.xml" title="David Done 博客" type="application/atom+xml">
   
@@ -85,7 +85,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Centos 6.x 安装Redis
+      Centos 6.x 安装Redis 源码编译
     </h1>
   
 
@@ -93,7 +93,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前提条件">前提条件</h2><p>redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make</p>
+        <h2 id="前提条件">前提条件</h2><p>对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make<br>如果使用Centos 7,可采用 yum install redis 直接安装。</p>
 <h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis<br>make &amp;&amp; make install #编译安装</p>
 <h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件</p>
 <pre><code>daemonize <span class="literal">yes</span> （<span class="literal">no</span>-<span class="function">-&gt;</span><span class="literal">yes</span>） <span class="comment"># 仅需要修改</span>
@@ -105,14 +105,19 @@ requirepass foobared <span class="comment"># 将其注释去掉,foobared即为�
 OK
 &gt;<span class="keyword">get</span> <span class="property">name</span>
 <span class="string">"david"</span>
-</code></pre><p>查看数据条数<br>    dbsize<br>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
+</code></pre><p>查看数据条数<br>    dbsize<br>查看redis版本号</p>
+<blockquote>
+<p>info</p>
+<h1 id="Server">Server</h1><p>redis_version:2.8.19<br>redis_git_sha1:00000000</p>
+</blockquote>
+<p>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
 <h3 id="redis开机自启动配置">redis开机自启动配置</h3><p>echo “/usr/local/bin/redis-server /etc/redis/redis.conf &amp;” &gt;&gt; /etc/rc.local<br>注意：开机启动要配置在 rc.local 中，而 /etc/profile 文件，要有用户登录了，才会被执行。</p>
 <h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwooc7uw0019kguzqyqhwlrn" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoowyfj001964uz6dadrg9l" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
