@@ -473,11 +473,11 @@ OK
 &gt;<span class="keyword">get</span> <span class="property">name</span>
 <span class="string">"david"</span>
 </code></pre><p>查看数据条数<br>    dbsize<br>查看redis版本号</p>
-<blockquote>
-<p>info</p>
-<h1 id="Server">Server</h1><p>redis_version:2.8.19<br>redis_git_sha1:00000000</p>
-</blockquote>
-<p>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
+<pre><code>&gt; info
+<span class="preprocessor"># Server</span>
+redis_version:<span class="number">2.8</span><span class="number">.19</span>
+redis_git_sha1:<span class="number">00000000</span>
+</code></pre><p>退出客户端<br>    exit<br>通过客户端关闭redis<br>redis-cli shutdown<br>redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
 <h3 id="redis开机自启动配置">redis开机自启动配置</h3><p>echo “/usr/local/bin/redis-server /etc/redis/redis.conf &amp;” &gt;&gt; /etc/rc.local<br>注意：开机启动要配置在 rc.local 中，而 /etc/profile 文件，要有用户登录了，才会被执行。</p>
 <h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop</p>
 
