@@ -37,7 +37,7 @@
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">If you can&#39;t fly then run, if you can&#39;t run then walk, if you can&#39;t walk then crawl, but whatever you do you have to keep moving forward...</a>
+          <a href="/" id="subtitle">Stay hungry,stay foolish. 记录学习成长点点滴滴.</a>
         </h2>
       
     </div>
@@ -65,6 +65,85 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-dubbo搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/11/dubbo搭建教程/" class="article-date">
+  <time datetime="2015-06-11T03:05:29.000Z" itemprop="datePublished">2015-06-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/dubbo/">dubbo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/11/dubbo搭建教程/">dubbo搭建教程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="dubbo简介">dubbo简介</h2><p>dubbo是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。</p>
+<p>dubbo解决的问题：个人理解，远程的方法能够本地调用，生产者提供服务接口，并实现其业务方法，消费者远程调用同名的接口实现。比webservice更加的强大。</p>
+<p>dubbo拓展：当当网在dubbo的基础上，开源了dubbox, 主要增加了REST API。让浏览器就具备了消费者的功能。</p>
+<p>dubbo的两种使用方法<br>方法一：Dubbo采用全Spring配置方式，对应用没有任何API侵入，只需用Spring加载Dubbo的配置即可，Dubbo基于Spring的Schema扩展进行加载。<br>方法二：通过API进行调用（不推荐）</p>
+<h2 id="dubbo安装">dubbo安装</h2><h3 id="git下载dubbo源码">git下载dubbo源码</h3><p>git clone <a href="https://github.com/alibaba/dubbo.git" target="_blank" rel="external">https://github.com/alibaba/dubbo.git</a> dubbo    #安装git，yum install git ,两三分钟</p>
+<h3 id="编辑dubbo二进制包">编辑dubbo二进制包</h3><p>cd ~/dubbo                   #dubbo主目录<br>mvn clean install -Dmaven.test.skip     # 编译二进制包<br><img src="/images/dubbo_course1.png" style="margin-left:0px"><br>cd dubbo/target   # 编译之后的结果</p>
+<h2 id="1_安装demo中服务生产者（170服务器）">1 安装demo中服务生产者（170服务器）</h2><p>cd /home/david/dubbo/dubbo-demo/dubbo-demo-provider/target #编译成功的生产者demo<br>tar zxvf dubbo-demo-provider-2.5.4-SNAPSHOT-assembly.tar.gz    # 解压生产者<br>cd dubbo-demo-provider-2.5.4-SNAPSHOT/  # 进入解压之后的目录<br>./bin/start.sh  启动    # 需要安装nc，telnet，yum install nc telnet<br>tail -f logs/stdout.log # 生产者开启之后，启动文件监听，当消费者启动访问服务之后会发送消息<br><img src="/images/dubbo_course2.png" style="margin-left:0px"></p>
+<p>./bin/stop.sh 停止<br>./bin/restart.sh 重启<br>./bin/start.sh debug 调试<br>./bin/dump.sh 系统状态<br>vi conf/dubbo.properties 配置</p>
+<h2 id="2_安装demo中服务消费者（170服务器-单机版，建议放在不同机器159，其余配置不更改即可）">2 安装demo中服务消费者（170服务器-单机版，建议放在不同机器159，其余配置不更改即可）</h2><p>cd /home/david/dubbo/dubbo-demo/dubbo-demo-consumer/target   # 编译成功的消费者demo<br>tar zxvf dubbo-demo-consumer-2.5.4-SNAPSHOT-assembly.tar.gz # 解压消费者<br>cd dubbo-demo-consumer-2.5.4-SNAPSHOT<br>./bin/start.sh  # 启动<br>tail -f logs/stdout.log # 消费者开启之后，启动文件监听<br><img src="/images/dubbo_course3.png" style="margin-left:0px"><br>总控入口:<br>./bin/server.sh start<br>./bin/server.sh stop<br>./bin/server.sh restart<br>./bin/server.sh debug<br>./bin/server.sh dump </p>
+<p>tail -f logs/stdout.log 标准输出</p>
+<p>注意：可以只运行Demo Provider 生产者和Demo Consumer消费者，使用默认的注册中心Multicast注册中心。实际生产使用不可使用multicast，推荐使用zookeeper。到时候需要Demo Proivder，Demo Consumer，Simple Monitor三者安装目录下的conf/dubbo.properties，dubbo.registry.address的值改为zookeeper://127.0.0.1:2181,最好更改为真实ip端口或域名。另外：multicast的ip段不用修改。<br><img src="/images/dubbo_course4.png" style="margin-left:0px"></p>
+<h2 id="3_安装simple_monitor监控中心并使用zookeeper作为注册中心">3 安装simple monitor监控中心并使用zookeeper作为注册中心</h2><p>cd /home/david/dubbo/dubbo-simple/dubbo-monitor-simple/target  # 编译成功的monitor<br>tar zxvf dubbo-monitor-simple-2.5.4-SNAPSHOT-assembly.tar.gz  # 解压monitor<br>cd dubbo-monitor-simple-2.5.4-SNAPSHOT </p>
+<p>vim conf/dubbo.properties  # 修改配置文件 设置zookeeper为注册中心<br>dubbo.registry.address=zookeeper://david:2181 # zookeeper为单点之时<br>dubbo.registry.address=zookeeper://david:2181?backup=david2:2181 #zookeeper为集群时候（选择）</p>
+<p>./bin/start.sh  # 启动  </p>
+<p>监控中心访问:<a href="http://192.168.1.170:8080" target="_blank" rel="external">http://192.168.1.170:8080</a><br><img src="/images/dubbo_course5.png" style="margin-left:0px"><br>注意：按照monitor，provider和consumer的顺序启动服务。<br>Demo Provider 生产者和Demo Consumer消费者的配置文件均需要修改为zookeeper<br>dubbo.registry.address=zookeeper://127.0.0.1:2181   #zookeeper单机版<br>dubbo.registry.address=zookeeper://david:2181?backup=david2:2181 #zookeeper集群版本 david为170服务器，david2为159服务器</p>
+<h2 id="4_安装admin管理控制台">4 安装admin管理控制台</h2><p>方式一（无效）：<br>cd ~/dubbo/dubbo-admin<br>mvn jetty:run -Ddubbo.registry.address=zookeeper://127.0.0.1:2181  #在jetty上启动web项目<br>管理控制台访问:<a href="http://192.168.1.170:8080" target="_blank" rel="external">http://192.168.1.170:8080</a>    # 账号root和root，guest和guest</p>
+<p>方式二（成功）：<br>cd /home/david/dubbo/dubbo-admin/target   # admin管理后台<br>cp dubbo-admin-2.5.4-SNAPSHOT.war /home/david/apache-tomcat-6.0.48/webapps #将项目移动到tomcat进行启动<br>管理控制台访问: <a href="http://192.168.1.170:8080/dubbo-admin-2.5.4-SNAPSHOT/" target="_blank" rel="external">http://192.168.1.170:8080/dubbo-admin-2.5.4-SNAPSHOT/</a> # 账号root和root<br>登录之后，能够看到各个服务器的相关信息<br><img src="/images/dubbo_course6.png" style="margin-left:0px"></p>
+<h2 id="dubbo快速使用">dubbo快速使用</h2><h3 id="本地服务：(Spring配置)">本地服务：(Spring配置)</h3><p>编辑文件local.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;bean id=&#34;xxxService&#34; class=&#34;com.xxx.XxxServiceImpl&#34; /&#62;&#10;&#60;bean id=&#34;xxxAction&#34; class=&#34;com.xxx.XxxAction&#34;&#62;&#10;    &#60;property name=&#34;xxxService&#34; ref=&#34;xxxService&#34; /&#62;&#10;&#60;/bean&#62;</span><br></pre></td></tr></table></figure></p>
+<h3 id="远程服务：(Spring配置)">远程服务：(Spring配置)</h3><p>在本地服务的基础上，只需做简单配置，即可完成远程化：<br>local.xml配置拆分成两份，将服务定义部分放在服务提供方remote-provider.xml，将服务引用部分放在服务消费方remote-consumer.xml。</p>
+<p>并在提供方增加暴露服务配置<dubbo:service>，在消费方增加引用服务配置<dubbo:reference>。<br>如下：<br>编辑文件remote-provider.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;bean id=&#34;xxxService&#34; class=&#34;com.xxx.XxxServiceImpl&#34; /&#62; &#60;!-- &#21644;&#26412;&#22320;&#26381;&#21153;&#19968;&#26679;&#23454;&#29616;&#36828;&#31243;&#26381;&#21153; --&#62;&#10;&#60;dubbo:service interface=&#34;com.xxx.XxxService&#34; ref=&#34;xxxService&#34; /&#62; &#60;!-- &#22686;&#21152;&#26292;&#38706;&#36828;&#31243;&#26381;&#21153;&#37197;&#32622; --&#62;</span><br></pre></td></tr></table></figure></dubbo:reference></dubbo:service></p>
+<p>编辑文件remote-consumer.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;dubbo:reference id=&#34;xxxService&#34; interface=&#34;com.xxx.XxxService&#34; /&#62; &#60;!-- &#22686;&#21152;&#24341;&#29992;&#36828;&#31243;&#26381;&#21153;&#37197;&#32622; --&#62;&#10;&#60;bean id=&#34;xxxAction&#34; class=&#34;com.xxx.XxxAction&#34;&#62; &#60;!-- &#21644;&#26412;&#22320;&#26381;&#21153;&#19968;&#26679;&#20351;&#29992;&#36828;&#31243;&#26381;&#21153; --&#62;&#10;    &#60;property name=&#34;xxxService&#34; ref=&#34;xxxService&#34; /&#62;&#10;&#60;/bean&#62;</span><br></pre></td></tr></table></figure></p>
+<p>dubbo官网：<a href="http://dubbo.io/" target="_blank" rel="external">http://dubbo.io/</a><br>dubbo源码下载（有效），包括git和mvn的安装方法：<a href="https://github.com/alibaba/dubbo" target="_blank" rel="external">https://github.com/alibaba/dubbo</a><br>dubbo用户指南：<a href="http://dubbo.io/User+Guide-zh.htm" target="_blank" rel="external">http://dubbo.io/User+Guide-zh.htm</a><br>dubbo服务器安装教程（老版本目前没有用了）：<a href="http://dubbo.io/Administrator+Guide-zh.htm#AdministratorGuide-zh-%E7%A4%BA%E4%BE%8B%E6%8F%90%E4%BE%9B%E8%80%85%E5%AE%89%E8%A3%85" target="_blank" rel="external">http://dubbo.io/Administrator+Guide-zh.htm#AdministratorGuide-zh-%E7%A4%BA%E4%BE%8B%E6%8F%90%E4%BE%9B%E8%80%85%E5%AE%89%E8%A3%85</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwocit230000acuz6u1fw37s" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MarkDown简明教材" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/10/MarkDown简明教材/" class="article-date">
@@ -72,7 +151,7 @@
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Hexo/">Hexo</a>
+    <a class="article-category-link" href="/categories/Toolbox/">Toolbox</a>►<a class="article-category-link" href="/categories/Toolbox/Hexo/">Hexo</a>
   </div>
 
   </div>
@@ -99,7 +178,8 @@
 <h2 id="链接语法">链接语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://daviddone.com - automatic!&#10;[daviddone](http://daviddone.com)</span><br></pre></td></tr></table></figure>
 <p>链接效果<br><a href="http://daviddone.com" target="_blank" rel="external">http://daviddone.com</a> - automatic!<br><a href="http://daviddone.com" target="_blank" rel="external">daviddone</a></p>
 <h2 id="图片语法">图片语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![&#22270;&#29255;](/images/hexo_scenery.png)</span><br></pre></td></tr></table></figure>
-<p>图片效果：<br><img src="/images/hexo_scenery.png" alt="图片"></p>
+<p>图片效果：<br><img src="/images/hexo_scenery.png" alt="图片"><br>图片靠左布局，需要采用html标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;img src=&#34;/images/hexo_scenery.png&#34; style=&#34;margin-left:0px&#34;&#62;</span><br></pre></td></tr></table></figure></p>
+<p>图片效果<br><img src="/images/hexo_scenery.png" style="margin-left:0px"></p>
 <h2 id="h2标题语法：">h2标题语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">## &#31895;&#20307;&#27880;&#24847;&#31354;&#26684;&#65292;h1&#20026; #</span><br></pre></td></tr></table></figure>
 <p>h2标题语法效果：</p>
 <h2 id="粗体注意空格">粗体注意空格</h2><h2 id="列表语法：">列表语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#25968;&#23383;&#21015;&#34920;:&#10;1. One&#10;2. Two&#10;&#22278;&#28857;&#21015;&#34920;:&#10;* &#36825;&#26159;&#22278;&#28857;&#21015;&#34920;&#10;&#36873;&#25321;&#21015;&#34920;:&#10;- &#36873;&#25321;&#21015;&#34920;&#19968;&#10;- &#36873;&#25321;&#21015;&#34920;&#20108;&#10;  - &#21015;&#34920;&#20108;&#20043;&#19968;&#10;  - &#21015;&#34920;&#20108;&#20043;&#20108;</span><br></pre></td></tr></table></figure>
@@ -126,7 +206,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cijmm7pxd001a04uzflpqkzgl" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoc5i3o001aa0uzql2qz2wr" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -160,7 +240,7 @@
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Hexo/">Hexo</a>
+    <a class="article-category-link" href="/categories/Toolbox/">Toolbox</a>►<a class="article-category-link" href="/categories/Toolbox/Hexo/">Hexo</a>
   </div>
 
   </div>
@@ -213,7 +293,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cijmm7pva000b04uz2n4zdfkz" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwoc5i0y000ba0uzyvevcm75" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -249,7 +329,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/Translation/">Translation</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Android/">Android</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -258,7 +338,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/">Translation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -267,7 +347,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Translation/" style="font-size: 10px;">Translation</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
+      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
     </div>
   </div>
 
@@ -276,7 +356,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -288,23 +368,23 @@
       <ul>
         
           <li>
-            <a href="/2015/12/12/采用lint清除无必要的res资源文件/">采用Lint清除无必要的res资源文件</a>
+            <a href="/2015/10/13/如何掌握英文/">如何掌握英文</a>
           </li>
         
           <li>
-            <a href="/2015/11/26/如何在广播接受者中调用显示通知栏/">如何在广播接受者中调用显示通知栏</a>
+            <a href="/2015/07/12/node-快捷键/">node++快捷键</a>
           </li>
         
           <li>
-            <a href="/2015/11/25/三方组件之个推消息中心/">三方组件之个推消息中心</a>
+            <a href="/2015/06/11/dubbo搭建教程/">dubbo搭建教程</a>
           </li>
         
           <li>
-            <a href="/2015/11/19/三方组件之高德地图/">三方组件之高德地图</a>
+            <a href="/2015/06/10/MarkDown简明教材/">MarkDown简明教材</a>
           </li>
         
           <li>
-            <a href="/2015/11/11/更新/">Android SDK 镜像更新</a>
+            <a href="/2015/06/10/搭建博客/">使用Github搭建Hexo博客</a>
           </li>
         
       </ul>
