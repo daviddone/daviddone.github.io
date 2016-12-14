@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: tools | David Done 博客</title>
+  <title>Category: Redis | David Done 博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="daviddone | Android">
 <meta property="og:type" content="website">
 <meta property="og:title" content="David Done 博客">
-<meta property="og:url" content="http://www.daviddone.com/tags/tools/index.html">
+<meta property="og:url" content="http://www.daviddone.com/categories/Database/Redis/index.html">
 <meta property="og:site_name" content="David Done 博客">
 <meta property="og:description" content="daviddone | Android">
 <meta name="twitter:card" content="summary">
@@ -65,14 +65,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-node-快捷键" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Centos 6.x 安装Redis" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/07/12/node-快捷键/" class="article-date">
-  <time datetime="2015-07-12T02:17:15.000Z" itemprop="datePublished">2015-07-12</time>
+    <a href="/2015/06/12/Centos 6.x 安装Redis/" class="article-date">
+  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Toolbox/">Toolbox</a>►<a class="article-category-link" href="/categories/Toolbox/tools/">tools</a>
+    <a class="article-category-link" href="/categories/Database/">Database</a>►<a class="article-category-link" href="/categories/Database/Redis/">Redis</a>
   </div>
 
   </div>
@@ -83,7 +83,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/12/node-快捷键/">node++快捷键</a>
+      <a class="article-title" href="/2015/06/12/Centos 6.x 安装Redis/">Centos 6.x 安装Redis</a>
     </h1>
   
 
@@ -91,16 +91,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://notepad-plus-plus.org/" target="_blank" rel="external">nodepad++</a>是我用过最好的文字编辑软件，她不但轻巧优雅，而且功能强大。不过为了更有效率的掌握她，我决定学习一些使用技巧和快捷键。<br><a href="https://notepad-plus-plus.org/" target="_blank" rel="external">参考官网</a><br><!-- http://blog.csdn.net/vindraz/article/details/12579201--></p>
-<h2 id="nodeplus_设置背景颜色<!-http://blog-csdn-net/fly542/article/details/7101118_->">nodeplus 设置背景颜色<!--http://blog.csdn.net/fly542/article/details/7101118 --></h2><p>设置选项-&gt;语言格式设置-&gt;语言 Global Styles -&gt; Global Override<br>按照如下操作：<br><img src="/images/tools/tools_nodepad.png" alt=""><br>点击背景色框，即可修改想要的背景色。如笔者使用的颜色：R，G，B分别为202,234,206。</p>
-<h4 id="同理设置行颜色">同理设置行颜色</h4><p>选中–&gt;Current line background<br>修改背景色，变为自己想要的颜色，如笔者使用的颜色：R，G，B分别为43,213,157。</p>
+        <h2 id="前提条件">前提条件</h2><p>redis 目前没有官方 RPM 安装包，我们需要从源代码编译，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make</p>
+<h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis </p>
+<h2 id="编译安装：">编译安装：</h2><p>make<br>make install</p>
+<h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件</p>
+<pre><code>daemonize <span class="literal">yes</span> （<span class="literal">no</span>-<span class="function">-&gt;</span><span class="literal">yes</span>） <span class="comment"># 仅需要修改</span>
+requirepass foobared <span class="comment"># 将其注释去掉,foobared即为密码</span>
+</code></pre><p>配置密码（可选，远程连接和集群建议）：requirepass foobared # 将其注释去掉,foobared即为密码<br>或在客户端命令行中，设置密码：config set requirepass foobared 查看密码：config get requirepass</p>
+<h2 id="启动redis">启动redis</h2><p>/usr/local/bin/redis-server /etc/redis/redis.conf<br>重启：service redis restart # 在源码安装方式下无效<br>查看启动<br>ps -ef | grep redis     # 其运行的端口号为6379</p>
+<p>##使用redis-cli客户端<br>redis-cli  # 启动命令<br>设置密码之后使用密码登录：<br>redis-cli -h 127.0.0.1 -p 6379 -a foobared 或者：redis-cli -a foobared </p>
+<pre><code>&gt;<span class="keyword">set</span> <span class="property">name</span> david
+OK
+&gt;<span class="keyword">get</span> <span class="property">name</span>
+</code></pre><p>“david”<br>查看数据条数<br>    dbsize<br>退出客户端<br>    exit<br>通过客户端关闭redis<br>    redis-cli shutdown<br>    redis-cli -h 127.0.0.1 -p 6379 shutdown  # 查看redis启动状态，已经变为关闭状态</p>
+<h3 id="redis开机自启动配置">redis开机自启动配置</h3><p>echo “/usr/local/bin/redis-server /etc/redis/redis.conf &amp;” &gt;&gt; /etc/rc.local<br>注意：开机启动要配置在 rc.local 中，而 /etc/profile 文件，要有用户登录了，才会被执行。</p>
+<h3 id="防火墙开启6379远程连接端口">防火墙开启6379远程连接端口</h3><p>查看Linx服务器上开启的端口号<br>      /etc/init.d/iptables status<br>如果没有开启，添加端口号配置<br> vi /etc/sysconfig/iptables<br>        添加代码：<br>        -A INPUT -m state –state NEW -m tcp -p tcp –dport 6379 -j ACCEPT<br>重启防火墙使端口更改生效<br>service iptables restart<br>或者直接关闭防火墙： service iptables stop</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="ciwoo416p000eo8uz4kwxb1od" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoo418l0019o8uz7hjrxclp" class="article-share-link">Share</a>
       
-        <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -116,7 +128,7 @@
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tools/">tools</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
 
     </footer>
   </div>
