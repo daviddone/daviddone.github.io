@@ -218,37 +218,43 @@
 <h3 id="关闭防火墙_centos_7">关闭防火墙 centos 7</h3><p>systemctl start firewalld  #启动firewall<br>systemctl stop firewalld   #停止firewall<br>systemctl status firewalld   # 查看防火墙状态</p>
 <h2 id="安装jdk_并设置环境变量(_参考《Linux安装Java》)">安装jdk 并设置环境变量( 参考《Linux安装Java》)</h2><p>注意java安装之后所在的文件夹，以及java_home</p>
 <h3 id="下载安装hadoop2-6-0">下载安装hadoop2.6.0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz&#10;tar -zxvf hadoop-2.6.0.tar.gz&#10;mv hadoop-2.6.0 /opt/hadoop</span><br></pre></td></tr></table></figure>
-<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>1配置hadoop  /opt/hadoop/etc/hadoop 文件下<br>第一个：hadoop-env.sh<br>vim hadoop-env.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#31532;27&#34892;&#10;export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk</span><br></pre></td></tr></table></figure></p>
-<p>注意：查看环境变量：echo  $JAVA_HOME<br>第二个：core-site.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- &#25351;&#23450;HADOOP&#25152;&#20351;&#29992;&#30340;&#25991;&#20214;&#31995;&#32479;schema&#65288;URI&#65289;&#65292;HDFS&#30340;&#32769;&#22823;&#65288;NameNode&#65289;&#30340;&#22320;&#22336; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;fs.defaultFS&#60;/name&#62;&#10;&#9;&#60;value&#62;hdfs://192.168.31.166:9000&#60;/value&#62;&#10;&#60;/property&#62;&#10;&#60;!-- &#25351;&#23450;hadoop&#36816;&#34892;&#26102;&#20135;&#29983;&#25991;&#20214;&#30340;&#23384;&#20648;&#30446;&#24405; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;hadoop.tmp.dir&#60;/name&#62;&#10;&#9;&#60;value&#62;/home/hadoop/tmp&#60;/value&#62;&#10;&#60;/property&#62;&#10;```&#9;&#10;&#31532;&#19977;&#20010;&#65306;hdfs-site.xml</span><br></pre></td></tr></table></figure></p>
-<!-- 指定HDFS副本的数量 -->
-<p><property><br>    <name>dfs.replication</name><br>    <value>1</value><br></property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#31532;&#22235;&#20010;&#65306;mapred-site.xml ( &#39318;&#20808;&#21512;&#24182; mv mapred-site.xml.template mapred-site.xml)&#10;mv mapred-site.xml.template mapred-site.xml&#10;vim mapred-site.xml</span><br></pre></td></tr></table></figure></p>
-<!-- 指定mr运行在yarn上 -->
-<p><property><br>    <name>mapreduce.framework.name</name><br>    <value>yarn</value><br></property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#31532;&#20116;&#20010;&#65306;yarn-site.xml</span><br></pre></td></tr></table></figure></p>
-<!-- 指定YARN的老大（ResourceManager）的地址 -->
-<p><property><br>    <name>yarn.resourcemanager.hostname</name><br>    <value>master</value><br></property><br><!-- reducer获取数据的方式 --></p>
-<p><property><br>    <name>yarn.nodemanager.aux-services</name><br>    <value>mapreduce_shuffle</value><br> </property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;&#27880;&#24847;&#65306;&#31532;&#19968;&#20010;&#37197;&#32622;&#21442;&#25968;hostname&#65292;&#38656;&#35201;&#37197;&#32622;192.168.1.10&#26381;&#21153;&#22120; &#65292;master&#10;hadoop&#28155;&#21152;&#21040;&#29615;&#22659;&#21464;&#37327;&#10;vim /etc/profile</span><br></pre></td></tr></table></figure></p>
-<pre><code>export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.7</span>.<span class="number">0</span>-openjdk  
-export HADOOP_HOME=/opt/hadoop
-export PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA</span>_HOME/bin:<span class="variable">$HADOOP</span>_HOME/bin:<span class="variable">$HADOOP</span>_HOME/sbin
-</code></pre><p>```<br>配置之后使其立马生效<br>    source /etc/profile </p>
+<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>1配置hadoop  /opt/hadoop/etc/hadoop 文件下</p>
+<h4 id="第一个：hadoop-env-sh">第一个：hadoop-env.sh</h4><p>vim hadoop-env.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk #&#31532;27&#34892;</span><br></pre></td></tr></table></figure></p>
+<p>注意：查看环境变量：echo  $JAVA_HOME</p>
+<h4 id="第二个：core-site-xml">第二个：core-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HADOOP所使用的文件系统schema（URI），HDFS的老大（NameNode）的地址 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://192.168.31.166:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="comment">&lt;!-- 指定hadoop运行时产生文件的存储目录 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/tmp<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第三个：hdfs-site-xml">第三个：hdfs-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HDFS副本的数量 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第四个：mapred-site-xml">第四个：mapred-site.xml</h4><p>mv mapred-site.xml.template mapred-site.xml  # 首先合并<br>vim mapred-site.xml</p>
+<pre><code><span class="comment">&lt;!-- 指定mr运行在yarn上 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第五个：yarn-site-xml">第五个：yarn-site.xml</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- &#25351;&#23450;YARN&#30340;&#32769;&#22823;&#65288;ResourceManager&#65289;&#30340;&#22320;&#22336; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.resourcemanager.hostname&#60;/name&#62;&#10;&#9;&#60;value&#62;master&#60;/value&#62;&#10;&#60;/property&#62;&#10;&#60;!-- reducer&#33719;&#21462;&#25968;&#25454;&#30340;&#26041;&#24335; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.nodemanager.aux-services&#60;/name&#62;&#10;&#9;&#60;value&#62;mapreduce_shuffle&#60;/value&#62;&#10; &#60;/property&#62;</span><br></pre></td></tr></table></figure>
+<p>注意：第一个配置参数hostname，需要配置192.168.1.10服务器 ，master</p>
+<h3 id="hadoop添加到环境变量">hadoop添加到环境变量</h3><p>vim /etc/profile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk  &#10;export HADOOP_HOME=/opt/hadoop&#10;export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure></p>
+<p>配置之后使其立马生效<br>source /etc/profile </p>
 <h3 id="格式化namenode_初始化">格式化namenode 初始化</h3><pre><code>hdfs namenode -<span class="built_in">format</span>    <span class="comment">#目录 /opt/hadoop/bin</span>
 </code></pre><p>注意：如果出现配置文件配置有误，这一步无法通过。</p>
-<h3 id="启动hadoop">启动hadoop</h3><pre><code>先启动HDFS
-sbin/<span class="built_in">start</span>-dfs.sh    <span class="comment">#目录/opt/hadoop/</span>
-再启动YARN
-sbin/<span class="built_in">start</span>-yarn.sh
-</code></pre><p>   ( 全部启动   sbin/start-all.sh)<br>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
-<h3 id="验证是否启动成功">验证是否启动成功</h3><pre><code>使用jps命令验证
-<span class="number">27408</span> NameNode
-<span class="number">28218</span> Jps
-<span class="number">27643</span> SecondaryNameNode
-<span class="number">28066</span> NodeManager
-<span class="number">27803</span> ResourceManager
-<span class="number">27512</span> DataNode
-
-http:<span class="comment">//192.168.31.166:50070 （HDFS管理界面）</span>
-http:<span class="comment">//192.168.31.166:8088 （MR管理界面）</span>
-</code></pre><h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
+<h3 id="启动hadoop">启动hadoop</h3><pre><code>sbin/<span class="built_in">start</span>-dfs.sh    <span class="comment">#先启动HDFS 目录/opt/hadoop/</span>
+sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启动YARN</span>
+( 全部启动   sbin/<span class="built_in">start</span>-all.sh)
+</code></pre><p>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
+<h3 id="验证是否启动成功">验证是否启动成功</h3><p>使用jps命令验证<br>27408 NameNode<br>28218 Jps<br>27643 SecondaryNameNode<br>28066 NodeManager<br>27803 ResourceManager<br>27512 DataNode</p>
+<p><a href="http://192.168.31.166:50070" target="_blank" rel="external">http://192.168.31.166:50070</a> （HDFS管理界面）<br><a href="http://192.168.31.166:8088" target="_blank" rel="external">http://192.168.31.166:8088</a> （MR管理界面）</p>
+<h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
 <h3 id="免密登录：">免密登录：</h3><p>ssh-keygen -t rsa -P ‘’  一直回车即可。会生成公钥，私钥。公钥是给目标服务器的，例如A服务器想访问B服务器。就将A的公钥给B服务器，B服务器将其公钥并写入授权。相当于B把A给他的门安上了,A还留着独一无二的钥匙。</p>
 <h4 id="自身免密登录">自身免密登录</h4><p>cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys  # 将自己的公钥进行授权</p>
 <h4 id="A服务器免密访问B服务器">A服务器免密访问B服务器</h4><p>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到B服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # 写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
