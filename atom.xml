@@ -60,6 +60,32 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Zookeeper集群搭建教程]]></title>
+    <link href="http://www.daviddone.com/2015/06/12/Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/"/>
+    <id>http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/</id>
+    <published>2015-06-12T03:05:29.000Z</published>
+    <updated>2016-12-14T06:35:39.812Z</updated>
+    <content type="html"><![CDATA[<h2 id="Zookeeper简介:">Zookeeper简介:</h2><p>其英文意思是：动物园管理员，hadoop生态中的很多分布式应用都是小动物。zookeeper是用来集群管理，配置管理，锁服务等分布式协调服务的。分布式服务难以管理。我理解的zookeeper就是一个协调管理分布式节点的。比如，9台zookeeper集群可以管理1000台节点。zookeeper经常用来做Hbase的高可用，而zookeeper本身就是高可用的实力代表。zookeeper范围非常广，  只要想要保证集群 一致性和高可用  都需要使用到zookeeper，从hadoop到dubble。zookeeper集群通过内部选取方法确保zookeeper集群中始终都存在着Leader进行高可用。</p>
+<h2 id="Zookeeper安装">Zookeeper安装</h2><h3 id="1_下载解压">1 下载解压</h3><p>wget  <a href="http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz" target="_blank" rel="external">http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz</a><br>tar zxvf zookeeper-3.3.6.tar.gz</p>
+<h3 id="2_设置环境变量（可选）">2 设置环境变量（可选）</h3><h3 id="3_修改配置文件_zoo-cfg">3 修改配置文件  zoo.cfg</h3><p>初次使用ZooKeeper，需要将/home/david/zookeeper-3.3.6/conf目录下的zoo_sample.cfg文件重命名为zoo.cfg。 重命名代码：mv zoo_sample.cfg zoo.cfg<br>vim zoo.cfg,按照如下代码配置<br>    tickTime=2000<br>    initLimit=10<br>    syncLimit=5<br>    dataDir=/home/data                        # 存放工作数据的临时的，更改为/home/data<br>    clientPort=2181<br>    server.0=192.168.1.10:2888:3888       # 此为单机配置方案，集群配置参考如下 </p>
+<h3 id="4_启动服务">4 启动服务</h3><p>sh  zkServer.sh start     # /home/david/zookeeper-3.3.6/bin目录下<br>sh  zkServer.sh stop   # 停止服务<br>sh  zkServer.sh  status  # 查看状态  启动成功的标志是：出现启动状态Mode: leader 或者follower<br>问题： 查看状态 之后，发现Error contacting service. It is probably not running. 这个时候在工作目录下建立myid文件，并写入状态码。</p>
+<h3 id="5_配置集群">5 配置集群</h3><p>vim zoo.cfg                #目录：home/david/zookeeper-3.3.6/conf<br>    server.1=192.168.1.170:2888:3888<br>    server.2=192.168.1.159:2888:3888<br>    server.3=192.168.1.10:2888:3888<br>工作数据存放 /home/data 文件夹下建立文件myid，不同服务器分别设置1 2 3　echo 1 &gt;&gt; myid<br>启动集群，分别启动各个节点：sh  zkServer.sh start  #  分别启动每台机器　需要启动三台<br>问题：配置集群之后，注意将防火墙关闭。如果遇到启动不成功的情况，查看日志/home/david/zookeeper-3.3.6/bin/zookeeper.out，然后进行排查即可。</p>
+<h3 id="6_客户端连接zookeeper">6 客户端连接zookeeper</h3><p>sh  zkClient.sh      # 服务器上保存1M以下的配置文件</p>
+<p>zookeeper 镜像资源下载路径：<a href="http://www.apache.org/dyn/closer.cgi/zookeeper/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/zookeeper/</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Zookeeper简介:">Zookeeper简介:</h2><p>其英文意思是：动物园管理员，hadoop生态中的很多分布式应用都是小动物。zookeeper是用来集群管理，配置管理，锁服务等分布式协调服务的。分布式服务难以管理。我理解的zookeeper就是一]]>
+    </summary>
+    
+      <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
+    
+      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
+    
+      <category term="zookeeper" scheme="http://www.daviddone.com/categories/Big-Data/zookeeper/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Hadoop集群搭建hadoop2.X版本]]></title>
     <link href="http://www.daviddone.com/2015/06/12/Hadoop%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BAhadoop2.X%E7%89%88%E6%9C%AC/"/>
     <id>http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/</id>
