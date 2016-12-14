@@ -93,9 +93,9 @@
       
         <h2 id="前提条件">前提条件</h2><p>对于Centos 6.x可以采用源代码编译安装centos，而为了要编译就需要安装 Make 和 GCC。<br>如果没有安装过 GCC 和 Make，使用 yum 安装。<br>yum install -y gcc make<br>如果使用Centos 7,可采用 yum install redis 直接安装。</p>
 <h2 id="官网下载redis源码">官网下载redis源码</h2><p>curl <a href="http://download.redis.io/releases/redis-3.0.4.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-3.0.4.tar.gz</a> -o redis-3.0.4.tar.gz  #解压<br>tar zxvf redis-3.0.4.tar.gz<br>mv redis-3.0.4 /usr/local/redis<br>cd /usr/local/redis<br>make &amp;&amp; make install #编译安装</p>
-<h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件</p>
-<pre><code>daemonize <span class="literal">yes</span> （<span class="literal">no</span>-<span class="function">-&gt;</span><span class="literal">yes</span>） <span class="comment"># 仅需要修改</span>
-requirepass foobared <span class="comment"># 将其注释去掉,foobared即为密码</span>
+<h2 id="设置配置文件路径">设置配置文件路径</h2><p>mkdir -p /etc/redis #创建配置文件路径<br>cp redis.conf /etc/redis/<br>vi /etc/redis/redis.conf #修改配置文件<br>    daemonize yes （no–&gt;yes）    #默认以后台程序方式运行</p>
+<pre><code><span class="preprocessor"># bind <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>   # 注释掉绑定本地，支持远程访问。或可以绑定指定访问ip白名单。</span>
+requirepass foobared <span class="preprocessor"># 将其注释去掉,foobared即为密码</span>
 </code></pre><p>配置密码（可选，远程连接和集群建议）：requirepass foobared # 将其注释去掉,foobared即为密码<br>或在客户端命令行中，设置密码：config set requirepass foobared 查看密码：config get requirepass</p>
 <h2 id="启动redis">启动redis</h2><p>/usr/local/bin/redis-server /etc/redis/redis.conf<br>重启：service redis restart # 在源码安装方式下无效<br>查看启动<br>ps -ef | grep redis     # 其运行的端口号为6379</p>
 <p>##使用redis-cli客户端<br>redis-cli  # 启动命令<br>设置密码之后使用密码登录：<br>redis-cli -h 127.0.0.1 -p 6379 -a foobared 或者：redis-cli -a foobared </p>
@@ -115,7 +115,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoowyfj001964uz6dadrg9l" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwoqgapi0019fkuznzyzrc49" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
