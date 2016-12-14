@@ -65,6 +65,76 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Hadoop集群搭建hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/" class="article-date">
+  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/hadoop/">hadoop</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。</p>
+<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><pre><code><span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>    master   <span class="preprocessor">#  主机 </span>
+<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>   david    <span class="preprocessor"># 工作机 slave</span>
+</code></pre><p>退出登录，重新进来，测试：ping david  # master上操作</p>
+<h3 id="2_Master访问所有slave节点配置免密访问">2 Master访问所有slave节点配置免密访问</h3><p>ssh-keygen -t rsa -P ‘’   # master操作，一直回车即可<br>就将master的公钥给所有的slave服务器，slave服务器将其公钥写入授权。<br>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到slave服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # slave服务器写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
+<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>    localhost   # 保留master主机的localhost，使其同时作为datanode。<br>    david</p>
+<p>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
+<h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
+<h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver<br>jps验证集群　<br>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
+<p>slave节点的服务：<br>4086 Jps<br>3812 DataNode<br>3927 NodeManager<br>注意：如果出现could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) ，这种情况是集群没能够搭建成功。删除掉hdfs工作数据文件，进行格式化之后hdfs namenode -format，重新启动，检查master节点是否有datanode，必须要有datanode。</p>
+<h2 id="集群的hdfs的使用">集群的hdfs的使用</h2><p>hdfs dfs -put /home/a.log hdfs://master:9000/   #将文件a.log 上传到hdfs上去。hdfs dfs命令也可以采用hadoop fs进行替换，在hadoop1.x中使用hadoop fs命令进行操作<br>hdfs dfs -ls /     #查看hdfs的所有目录, 或 hadoop fs -ls hdfs://master:9000/<br>hdfs dfs -mkdir -p /user/hadoop/david/test  #创建文件<br>hdfs dfs -mkdir -p /user/hadoop</p>
+<p>可通过web ui查看:  <a href="http://192.168.1.10:50070" target="_blank" rel="external">http://192.168.1.10:50070</a>   # 需要关闭防火墙  service firewalld stop<br><img src="/images/hadoop_cluster1.png" alt="图片"></p>
+<p>hadoop2.6.0版本官网集群：<a href="http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="external">http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoi0mup000v6cuz5ilet066" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Hadoop单机安装教程 hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" class="article-date">
@@ -142,77 +212,9 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwohi14z000vfsuzkm03mv05" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoi0muy00106cuzad8ffcca" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
-	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'daviddone';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Hadoop集群搭建hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/" class="article-date">
-  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/hadoop/">hadoop</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。</p>
-<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><p>192.168.1.10    master   #  主机<br>192.168.1.170   david    # 工作机 slave<br>退出登录，重新进来，测试：ping david  # master上操作</p>
-<h3 id="2_Master访问所有slave节点配置免密访问">2 Master访问所有slave节点配置免密访问</h3><p>ssh-keygen -t rsa -P ‘’   # master操作，一直回车即可<br>就将master的公钥给所有的slave服务器，slave服务器将其公钥写入授权。<br>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到slave服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # slave服务器写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
-<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>localhost   # 保留master主机的localhost，使其同时作为datanode。<br>david</p>
-<p>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
-<h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
-<h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver<br>jps验证集群　<br>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
-<p>slave节点的服务：<br>4086 Jps<br>3812 DataNode<br>3927 NodeManager<br>注意：如果出现could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) ，这种情况是集群没能够搭建成功。删除掉hdfs工作数据文件，进行格式化之后hdfs namenode -format，重新启动，检查master节点是否有datanode，必须要有datanode。</p>
-<h2 id="集群的hdfs的使用">集群的hdfs的使用</h2><p>hdfs dfs -put /home/a.log hdfs://master:9000/   #将文件a.log 上传到hdfs上去。hdfs dfs命令也可以采用hadoop fs进行替换，在hadoop1.x中使用hadoop fs命令进行操作<br>hdfs dfs -ls /     #查看hdfs的所有目录, 或 hadoop fs -ls hdfs://master:9000/<br>hdfs dfs -mkdir -p /user/hadoop/david/test  #创建文件<br>hdfs dfs -mkdir -p /user/hadoop</p>
-<p>可通过web ui查看:  <a href="http://192.168.1.10:50070" target="_blank" rel="external">http://192.168.1.10:50070</a>   # 需要关闭防火墙  service firewalld stop<br><img src="/images/hadoop_cluster1.png" alt="图片"></p>
-<p>hadoop2.6.0版本官网集群：<a href="http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="external">http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwohy50e0000isuzm065mhqz" class="article-share-link">Share</a>
-      
-        <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -289,7 +291,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwohi14a000kfsuzgfg1dxbd" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoi0mu5000k6cuz3hlva3ns" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -382,7 +384,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwohi14r000rfsuzuktypblc" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoi0mui000r6cuzalj9z6j4" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -465,11 +467,11 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
           </li>
         
           <li>
-            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+            <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
           </li>
         
           <li>
-            <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
           </li>
         
           <li>

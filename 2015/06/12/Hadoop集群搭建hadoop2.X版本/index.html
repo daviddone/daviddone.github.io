@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hadoop单机安装教程 hadoop2.X版本 | David Done 博客</title>
+  <title>Hadoop集群搭建hadoop2.X版本 | David Done 博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="hadoop集群简介hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&amp;gt;管理–&amp;gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。
 hadoop集群搭建1 每个节点修改hosts文件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hadoop单机安装教程 hadoop2.X版本">
+<meta property="og:title" content="Hadoop集群搭建hadoop2.X版本">
 <meta property="og:url" content="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/index.html">
 <meta property="og:site_name" content="David Done 博客">
 <meta property="og:description" content="hadoop集群简介hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&amp;gt;管理–&amp;gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。
 hadoop集群搭建1 每个节点修改hosts文件">
 <meta property="og:image" content="http://www.daviddone.com/images/hadoop_cluster1.png">
-<meta property="og:updated_time" content="2016-12-14T05:28:24.541Z">
+<meta property="og:updated_time" content="2016-12-14T05:30:28.843Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hadoop单机安装教程 hadoop2.X版本">
+<meta name="twitter:title" content="Hadoop集群搭建hadoop2.X版本">
 <meta name="twitter:description" content="hadoop集群简介hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&amp;gt;管理–&amp;gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。
 hadoop集群搭建1 每个节点修改hosts文件">
   
@@ -86,7 +86,7 @@ hadoop集群搭建1 每个节点修改hosts文件">
         
   
     <h1 class="article-title" itemprop="name">
-      Hadoop单机安装教程 hadoop2.X版本
+      Hadoop集群搭建hadoop2.X版本
     </h1>
   
 
@@ -95,9 +95,11 @@ hadoop集群搭建1 每个节点修改hosts文件">
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。</p>
-<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><p>192.168.1.10    master   #  主机<br>192.168.1.170   david    # 工作机 slave<br>退出登录，重新进来，测试：ping david  # master上操作</p>
+<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><pre><code><span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>    master   <span class="preprocessor">#  主机 </span>
+<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>   david    <span class="preprocessor"># 工作机 slave</span>
+</code></pre><p>退出登录，重新进来，测试：ping david  # master上操作</p>
 <h3 id="2_Master访问所有slave节点配置免密访问">2 Master访问所有slave节点配置免密访问</h3><p>ssh-keygen -t rsa -P ‘’   # master操作，一直回车即可<br>就将master的公钥给所有的slave服务器，slave服务器将其公钥写入授权。<br>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到slave服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # slave服务器写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
-<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>localhost   # 保留master主机的localhost，使其同时作为datanode。<br>david</p>
+<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>    localhost   # 保留master主机的localhost，使其同时作为datanode。<br>    david</p>
 <p>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
 <h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
 <h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver<br>jps验证集群　<br>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
@@ -109,7 +111,7 @@ hadoop集群搭建1 每个节点修改hosts文件">
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwohy50e0000isuzm065mhqz" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwoi0mup000v6cuz5ilet066" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -135,19 +137,19 @@ hadoop集群搭建1 每个节点修改hosts文件">
     
 <nav id="article-nav">
   
-    <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/07/12/node-快捷键/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Hadoop单机安装教程 hadoop2.X版本
+          node++快捷键
         
       </div>
     </a>
   
   
-    <a href="/2015/06/11/dubbo搭建教程/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">dubbo搭建教程</div>
+      <div class="article-nav-title">Hadoop单机安装教程 hadoop2.X版本</div>
     </a>
   
 </nav>
@@ -216,11 +218,11 @@ hadoop集群搭建1 每个节点修改hosts文件">
           </li>
         
           <li>
-            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+            <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
           </li>
         
           <li>
-            <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
           </li>
         
           <li>
