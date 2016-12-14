@@ -101,7 +101,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="ciwoc5i1l000na0uzeeevbssb" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/13/如何掌握英文/" data-id="ciwoeb4z200096suzyw55dqwo" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/13/如何掌握英文/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -159,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="ciwoc5i2v0014a0uzhb3pga0f" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="ciwoeb4zd000e6suzcm22r6s5" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -178,6 +178,146 @@
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tools/">tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Hadoop单机安装教程 hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" class="article-date">
+  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/hadoop/">hadoop</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  “david”  # centos 7</p>
+<h3 id="修改hosts配置文件，修改对应主机名称">修改hosts配置文件，修改对应主机名称</h3><pre><code>vim /etc/hosts
+<span class="number">192.168</span><span class="number">.31</span><span class="number">.166</span>   master  （必须）  <span class="preprocessor"># echo $HOSTNAME 查看主机名称</span>
+</code></pre><h3 id="关闭防火墙_centos_6-4">关闭防火墙 centos 6.4</h3><pre><code><span class="preprocessor">#查看防火墙状态</span>
+service iptables status 
+<span class="preprocessor">#关闭防火墙  </span>
+service iptables stop
+<span class="preprocessor">#查看防火墙开机启动状态</span>
+chkconfig iptables --list
+<span class="preprocessor">#关闭防火墙开机启动</span>
+chkconfig iptables off   
+</code></pre><h3 id="关闭防火墙_centos_7">关闭防火墙 centos 7</h3><p>systemctl start firewalld  #启动firewall<br>systemctl stop firewalld   #停止firewall<br>systemctl status firewalld   # 查看防火墙状态</p>
+<h2 id="安装jdk_并设置环境变量(_参考《Linux安装Java》)">安装jdk 并设置环境变量( 参考《Linux安装Java》)</h2><p>注意java安装之后所在的文件夹，以及java_home</p>
+<h3 id="下载安装hadoop2-6-0">下载安装hadoop2.6.0</h3><p>  wget <a href="http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz</a><br>  tar -zxvf hadoop-2.6.0.tar.gz<br>  mv hadoop-2.6.0 /opt/hadoop</p>
+<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>   1配置hadoop  /opt/hadoop/etc/hadoop 文件下<br>    第一个：hadoop-env.sh<br>        vim hadoop-env.sh</p>
+<pre><code>    #第27行
+    export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk
+注意：查看环境变量：echo  $JAVA_HOME
+第二个：core-site.xml
+
+    <span class="comment">&lt;!-- 指定HADOOP所使用的文件系统schema（URI），HDFS的老大（NameNode）的地址 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://192.168.31.166:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 指定hadoop运行时产生文件的存储目录 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/tmp<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第三个：hdfs-site.xml   
+    <span class="comment">&lt;!-- 指定HDFS副本的数量 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第四个：mapred-site.xml ( 首先合并 mv mapred-site.xml.template mapred-site.xml)
+    mv mapred-site.xml.template mapred-site.xml
+    vim mapred-site.xml
+    <span class="comment">&lt;!-- 指定mr运行在yarn上 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第五个：yarn-site.xml
+    <span class="comment">&lt;!-- 指定YARN的老大（ResourceManager）的地址 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>master<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- reducer获取数据的方式 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    注意：第一个配置参数hostname，需要配置192.168.1.10服务器 ，master
+</code></pre><p>   hadoop添加到环境变量<br>    vim /etc/profile<br>        export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk<br>        export HADOOP_HOME=/opt/hadoop<br>        export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin<br>   配置之后使其立马生效<br>    source /etc/profile </p>
+<h3 id="格式化namenode_初始化">格式化namenode 初始化</h3><pre><code>hdfs namenode -<span class="built_in">format</span>    <span class="comment">#目录 /opt/hadoop/bin</span>
+</code></pre><p>注意：如果出现配置文件配置有误，这一步无法通过。</p>
+<h3 id="启动hadoop">启动hadoop</h3><pre><code> 先启动HDFS
+ sbin/start-dfs.<span class="keyword">sh</span>    #目录/<span class="keyword">opt</span>/hadoop/
+ 再启动YARN
+ sbin/start-yarn.<span class="keyword">sh</span>
+( 全部启动   sbin/start-<span class="keyword">all</span>.<span class="keyword">sh</span>)
+</code></pre><p>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
+<h3 id="验证是否启动成功">验证是否启动成功</h3><pre><code>使用jps命令验证
+<span class="number">27408</span> NameNode
+<span class="number">28218</span> Jps
+<span class="number">27643</span> SecondaryNameNode
+<span class="number">28066</span> NodeManager
+<span class="number">27803</span> ResourceManager
+<span class="number">27512</span> DataNode
+
+http:<span class="comment">//192.168.31.166:50070 （HDFS管理界面）</span>
+http:<span class="comment">//192.168.31.166:8088 （MR管理界面）</span>
+</code></pre><h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
+<h3 id="免密登录：">免密登录：</h3><p>ssh-keygen -t rsa -P ‘’  一直回车即可。会生成公钥，私钥。公钥是给目标服务器的，例如A服务器想访问B服务器。就将A的公钥给B服务器，B服务器将其公钥并写入授权。相当于B把A给他的门安上了,A还留着独一无二的钥匙。</p>
+<h4 id="自身免密登录">自身免密登录</h4><p>cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys  # 将自己的公钥进行授权</p>
+<h4 id="A服务器免密访问B服务器">A服务器免密访问B服务器</h4><p>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到B服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # 写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
+<p>hadoop镜像地址：<a href="http://www.apache.org/dyn/closer.cgi/hadoop/common/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common/</a><br>ssh免密登录资料：<a href="http://chenlb.iteye.com/blog/211809" target="_blank" rel="external">http://chenlb.iteye.com/blog/211809</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwoeb50h000v6suzgu0z45uz" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
 
     </footer>
   </div>
@@ -238,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwocit230000acuz6u1fw37s" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwoeb4zs000k6suz6oadxbpv" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -327,7 +467,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoc5i3o001aa0uzql2qz2wr" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwoeb503000r6suzdj7r59l4" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -414,7 +554,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwoc5i0y000ba0uzyvevcm75" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciwoeb4y800006suzlozk46vd" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -450,7 +590,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -459,7 +599,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -477,7 +617,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -497,15 +637,15 @@
           </li>
         
           <li>
+            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+          </li>
+        
+          <li>
             <a href="/2015/06/11/dubbo搭建教程/">dubbo搭建教程</a>
           </li>
         
           <li>
             <a href="/2015/06/10/MarkDown简明教材/">MarkDown简明教材</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/10/搭建博客/">使用Github搭建Hexo博客</a>
           </li>
         
       </ul>

@@ -60,6 +60,108 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Hadoop单机安装教程 hadoop2.X版本]]></title>
+    <link href="http://www.daviddone.com/2015/06/12/Hadoop%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%20hadoop2.X%E7%89%88%E6%9C%AC/"/>
+    <id>http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/</id>
+    <published>2015-06-12T03:05:29.000Z</published>
+    <updated>2016-12-14T03:47:44.234Z</updated>
+    <content type="html"><![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  “david”  # centos 7</p>
+<h3 id="修改hosts配置文件，修改对应主机名称">修改hosts配置文件，修改对应主机名称</h3><pre><code>vim /etc/hosts
+<span class="number">192.168</span><span class="number">.31</span><span class="number">.166</span>   master  （必须）  <span class="preprocessor"># echo $HOSTNAME 查看主机名称</span>
+</code></pre><h3 id="关闭防火墙_centos_6-4">关闭防火墙 centos 6.4</h3><pre><code><span class="preprocessor">#查看防火墙状态</span>
+service iptables status 
+<span class="preprocessor">#关闭防火墙  </span>
+service iptables stop
+<span class="preprocessor">#查看防火墙开机启动状态</span>
+chkconfig iptables --list
+<span class="preprocessor">#关闭防火墙开机启动</span>
+chkconfig iptables off   
+</code></pre><h3 id="关闭防火墙_centos_7">关闭防火墙 centos 7</h3><p>systemctl start firewalld  #启动firewall<br>systemctl stop firewalld   #停止firewall<br>systemctl status firewalld   # 查看防火墙状态</p>
+<h2 id="安装jdk_并设置环境变量(_参考《Linux安装Java》)">安装jdk 并设置环境变量( 参考《Linux安装Java》)</h2><p>注意java安装之后所在的文件夹，以及java_home</p>
+<h3 id="下载安装hadoop2-6-0">下载安装hadoop2.6.0</h3><p>  wget <a href="http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz</a><br>  tar -zxvf hadoop-2.6.0.tar.gz<br>  mv hadoop-2.6.0 /opt/hadoop</p>
+<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>   1配置hadoop  /opt/hadoop/etc/hadoop 文件下<br>    第一个：hadoop-env.sh<br>        vim hadoop-env.sh</p>
+<pre><code>    #第27行
+    export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk
+注意：查看环境变量：echo  $JAVA_HOME
+第二个：core-site.xml
+
+    <span class="comment">&lt;!-- 指定HADOOP所使用的文件系统schema（URI），HDFS的老大（NameNode）的地址 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://192.168.31.166:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 指定hadoop运行时产生文件的存储目录 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/tmp<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第三个：hdfs-site.xml   
+    <span class="comment">&lt;!-- 指定HDFS副本的数量 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第四个：mapred-site.xml ( 首先合并 mv mapred-site.xml.template mapred-site.xml)
+    mv mapred-site.xml.template mapred-site.xml
+    vim mapred-site.xml
+    <span class="comment">&lt;!-- 指定mr运行在yarn上 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+
+第五个：yarn-site.xml
+    <span class="comment">&lt;!-- 指定YARN的老大（ResourceManager）的地址 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>master<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- reducer获取数据的方式 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    注意：第一个配置参数hostname，需要配置192.168.1.10服务器 ，master
+</code></pre><p>   hadoop添加到环境变量<br>    vim /etc/profile<br>        export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk<br>        export HADOOP_HOME=/opt/hadoop<br>        export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin<br>   配置之后使其立马生效<br>    source /etc/profile </p>
+<h3 id="格式化namenode_初始化">格式化namenode 初始化</h3><pre><code>hdfs namenode -<span class="built_in">format</span>    <span class="comment">#目录 /opt/hadoop/bin</span>
+</code></pre><p>注意：如果出现配置文件配置有误，这一步无法通过。</p>
+<h3 id="启动hadoop">启动hadoop</h3><pre><code> 先启动HDFS
+ sbin/start-dfs.<span class="keyword">sh</span>    #目录/<span class="keyword">opt</span>/hadoop/
+ 再启动YARN
+ sbin/start-yarn.<span class="keyword">sh</span>
+( 全部启动   sbin/start-<span class="keyword">all</span>.<span class="keyword">sh</span>)
+</code></pre><p>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
+<h3 id="验证是否启动成功">验证是否启动成功</h3><pre><code>使用jps命令验证
+<span class="number">27408</span> NameNode
+<span class="number">28218</span> Jps
+<span class="number">27643</span> SecondaryNameNode
+<span class="number">28066</span> NodeManager
+<span class="number">27803</span> ResourceManager
+<span class="number">27512</span> DataNode
+
+http:<span class="comment">//192.168.31.166:50070 （HDFS管理界面）</span>
+http:<span class="comment">//192.168.31.166:8088 （MR管理界面）</span>
+</code></pre><h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
+<h3 id="免密登录：">免密登录：</h3><p>ssh-keygen -t rsa -P ‘’  一直回车即可。会生成公钥，私钥。公钥是给目标服务器的，例如A服务器想访问B服务器。就将A的公钥给B服务器，B服务器将其公钥并写入授权。相当于B把A给他的门安上了,A还留着独一无二的钥匙。</p>
+<h4 id="自身免密登录">自身免密登录</h4><p>cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys  # 将自己的公钥进行授权</p>
+<h4 id="A服务器免密访问B服务器">A服务器免密访问B服务器</h4><p>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到B服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # 写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
+<p>hadoop镜像地址：<a href="http://www.apache.org/dyn/closer.cgi/hadoop/common/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common/</a><br>ssh免密登录资料：<a href="http://chenlb.iteye.com/blog/211809" target="_blank" rel="external">http://chenlb.iteye.com/blog/211809</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  ]]>
+    </summary>
+    
+      <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
+    
+      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
+    
+      <category term="hadoop" scheme="http://www.daviddone.com/categories/Big-Data/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[dubbo搭建教程]]></title>
     <link href="http://www.daviddone.com/2015/06/11/dubbo%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/"/>
     <id>http://www.daviddone.com/2015/06/11/dubbo搭建教程/</id>
