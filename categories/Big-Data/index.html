@@ -65,6 +65,81 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Storm集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/12/Storm集群搭建教程/" class="article-date">
+  <time datetime="2015-08-12T03:05:29.000Z" itemprop="datePublished">2015-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/Storm/">Storm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/12/Storm集群搭建教程/">Storm集群搭建教程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="storm简介">storm简介</h2><p>Apache Storm是一个由twitter开源的分布式实时计算系统。 Storm拥有很多实用场景：实时分析，在线机器学习，连续计算，分布式RPC，ETL等。Storm运算速度快：单个节点每秒处理上百万个数组，数据延迟非常低。 Storm是基于内存进行实时计算的，计算之后数据必须及时进行存储。</p>
+<h2 id="前提条件">前提条件</h2><p>1 启动zookeeper集群<br>2 各个集群节点保证java和python环境</p>
+<h2 id="storm下载安装">storm下载安装</h2><p>wget <a href="http://apache.fayea.com/storm/apache-storm-1.0.0/apache-storm-1.0.0.tar.gz" target="_blank" rel="external">http://apache.fayea.com/storm/apache-storm-1.0.0/apache-storm-1.0.0.tar.gz</a>   # 下载<br>tar zxvf apache-storm-1.0.0.tar.gz   # 解压<br>mv apache-storm-1.0.0 storm     # 移动到storm   目录/home/david/storm</p>
+<h2 id="配置文件修改_storm-yaml">配置文件修改 storm.yaml</h2><p>vim storm.yaml   # 目录/home/david/storm/conf<br>至少完成以下3处的配置，修改配置如下</p>
+<h4 id="1_配置zookeeper节点，根据实际情况配置多个">1 配置zookeeper节点，根据实际情况配置多个</h4><pre><code>storm.zookeeper.servers:
+    -<span class="ruby"> <span class="string">"master"</span>
+</span>    -<span class="ruby"> <span class="string">"david2"</span>                               </span>
+</code></pre><h4 id="2_storm-local-dir用于配置Storm存储少量文件的路径">2 storm.local.dir用于配置Storm存储少量文件的路径</h4><pre><code>storm<span class="class">.local</span><span class="class">.dir</span>: <span class="string">"/home/david/storm/data"</span>
+</code></pre><h4 id="3_配置nimbus-seeds，master作主节点">3 配置nimbus.seeds，master作主节点</h4><pre><code>nimbus<span class="class">.seeds</span>: [<span class="string">"master"</span>]
+</code></pre><h2 id="将配置好的storm分发到各个节点">将配置好的storm分发到各个节点</h2><pre><code>scp -r storm root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
+</code></pre><h2 id="storm启动集群">storm启动集群</h2><pre><code>.<span class="regexp">/bin/</span>storm nimbus    # 主节点上运行 <span class="regexp">/home/</span>david<span class="regexp">/storm/</span>   
+.<span class="regexp">/bin/</span>storm supervisor  #所有节点包括主节点  工作机上运行 需要开启另外的窗口终端执行
+.<span class="regexp">/bin/</span>storm ui    # 主节点运行
+</code></pre><p>注意：可以后台启动，并将启动日志存在logs/nimbus.out，2&gt;&amp;1代表包括错误日志一起写入<br>    ./bin/storm nimbus  &gt;&gt; logs/nimbus.out 2&gt;&amp;1 &amp;<br>    ./bin/storm supervisor &gt;&gt; logs/supervisor.out  2&gt;&amp;1 &amp;<br>    ./bin/storm ui   &gt;&gt; logs/supervisor.out  2&gt;&amp;1 &amp;</p>
+<h2 id="验证storm集群成功启动">验证storm集群成功启动</h2><p>1 启动之后jps查看主节点<br><img src="/images/storm_cluster1.png" style="margin-left:0px"><br>jps查看从节点<br><img src="/images/storm_cluster2.png" style="margin-left:0px"></p>
+<p>2 访问web ui  <a href="http://192.168.31.166:8080" target="_blank" rel="external">http://192.168.31.166:8080</a><br><img src="/images/storm_cluster3.png" style="margin-left:0px"></p>
+<p>注意：主控节点（Master Node）上运行一个被称为Nimbus的后台程序，它负责在Storm集群内分发代码，分配任务给工作机器，并且负责监控集群运行状态。<br>每个工作节点（Work Node）上运行一个被称为Supervisor的后台程序。Supervisor负责监听从Nimbus分配给它执行的任务，据此启动或停止执行任务的工作进程。每一个工作进程执行一个Topology的子集；一个运行中的Topology由分布在不同工作节点上的多个工作进程组成。</p>
+<p>storm官方安装教程：<a href="http://storm.apache.org/releases/1.0.0/Setting-up-a-Storm-cluster.html" target="_blank" rel="external">http://storm.apache.org/releases/1.0.0/Setting-up-a-Storm-cluster.html</a><br>storm镜像资源下载路径：<a href="http://www.apache.org/dyn/closer.cgi/storm" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/storm</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="ciwpsy87w000weouz7rklc2k1" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Storm/">Storm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Zookeeper集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/12/Zookeeper集群搭建教程/" class="article-date">
@@ -112,7 +187,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwor4fjv000rx8uz6vnhhx28" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwpsy87m000reouzhl3voquk" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -182,7 +257,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwor4fke0010x8uzdv0vhafv" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwpsy88i0015eouz7c394d3j" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -286,7 +361,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwor4fku0015x8uzp5ce3l7s" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwpsy88w001aeouzqpthwxh2" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -365,7 +440,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwor4fje000kx8uzblmlwf7w" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwpsy876000keouzkr3ump6c" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -401,7 +476,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Storm/">Storm</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -410,7 +485,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Storm/">Storm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -419,7 +494,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
+      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Storm/" style="font-size: 10px;">Storm</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
     </div>
   </div>
 
@@ -428,7 +503,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -444,6 +519,10 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
           </li>
         
           <li>
+            <a href="/2015/08/12/Storm集群搭建教程/">Storm集群搭建教程</a>
+          </li>
+        
+          <li>
             <a href="/2015/07/12/node-快捷键/">node++快捷键</a>
           </li>
         
@@ -453,10 +532,6 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
         
           <li>
             <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
           </li>
         
       </ul>
