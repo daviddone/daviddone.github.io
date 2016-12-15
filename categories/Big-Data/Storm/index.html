@@ -108,9 +108,7 @@
 <pre><code>./bin/storm nimbus  &gt;&gt; logs/nimbus.out <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;     
 ./bin/storm supervisor &gt;&gt; logs/supervisor.out  <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;
 ./bin/storm ui   &gt;&gt; logs/supervisor.out  <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;
-
-<span class="preprocessor">## 验证storm集群成功启动</span>
-</code></pre><p>1 启动之后jps查看主节点<br><img src="/images/storm_cluster1.png" style="margin-left:0px"><br>jps查看从节点<br><img src="/images/storm_cluster2.png" style="margin-left:0px"></p>
+</code></pre><h2 id="验证storm集群成功启动">验证storm集群成功启动</h2><p>1 启动之后jps查看主节点<br><img src="/images/storm_cluster1.png" style="margin-left:0px"><br>jps查看从节点<br><img src="/images/storm_cluster2.png" style="margin-left:0px"></p>
 <p>2 访问web ui  <a href="http://192.168.31.166:8080" target="_blank" rel="external">http://192.168.31.166:8080</a><br><img src="/images/storm_cluster3.png" style="margin-left:0px"></p>
 <p>注意：主控节点（Master Node）上运行一个被称为Nimbus的后台程序，它负责在Storm集群内分发代码，分配任务给工作机器，并且负责监控集群运行状态。<br>每个工作节点（Work Node）上运行一个被称为Supervisor的后台程序。Supervisor负责监听从Nimbus分配给它执行的任务，据此启动或停止执行任务的工作进程。每一个工作进程执行一个Topology的子集；一个运行中的Topology由分布在不同工作节点上的多个工作进程组成。</p>
 <p>storm官方安装教程：<a href="http://storm.apache.org/releases/1.0.0/Setting-up-a-Storm-cluster.html" target="_blank" rel="external">http://storm.apache.org/releases/1.0.0/Setting-up-a-Storm-cluster.html</a><br>storm镜像资源下载路径：<a href="http://www.apache.org/dyn/closer.cgi/storm" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/storm</a></p>
@@ -118,7 +116,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="ciwpsy87w000weouz7rklc2k1" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="ciwpt822m000wmsuznvnbi523" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
