@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/5 | David Done 博客</title>
+  <title>Archives: 2015/10 | David Done 博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="daviddone | Android">
 <meta property="og:type" content="website">
 <meta property="og:title" content="David Done 博客">
-<meta property="og:url" content="http://www.daviddone.com/archives/2015/05/index.html">
+<meta property="og:url" content="http://www.daviddone.com/archives/2015/10/index.html">
 <meta property="og:site_name" content="David Done 博客">
 <meta property="og:description" content="daviddone | Android">
 <meta name="twitter:card" content="summary">
@@ -65,14 +65,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-如何掌握英文" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Ubuntu使用crontab执行定时任务" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/05/13/如何掌握英文/" class="article-date">
-  <time datetime="2015-05-13T01:54:54.000Z" itemprop="datePublished">2015-05-13</time>
+    <a href="/2015/10/12/Ubuntu使用crontab执行定时任务/" class="article-date">
+  <time datetime="2015-10-12T03:05:29.000Z" itemprop="datePublished">2015-10-12</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/English/">English</a>►<a class="article-category-link" href="/categories/English/Methodology/">Methodology</a>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/crontab/">crontab</a>
   </div>
 
   </div>
@@ -83,7 +83,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/13/如何掌握英文/">如何掌握英文</a>
+      <a class="article-title" href="/2015/10/12/Ubuntu使用crontab执行定时任务/">Ubuntu使用crontab执行定时任务</a>
     </h1>
   
 
@@ -91,19 +91,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="目的">目的</h2><p>学习一门外语，不可避及的就是谈一谈，学习这门外语的目的，例如笔者学习英语的主要的目的是，学好英文，能够无障碍看美剧，看英文原著，看英文技术文档，用流利的英文交流，或者用英文来写写文章来陶冶一下情操。正是有了这些目标，我才能够有动力不断学习英文，有意识的运用英文。</p>
-<h2 id="方法">方法</h2><h3 id="朗读和背诵">朗读和背诵</h3><p>学习任何语言，最基本且有效的方法就是朗读和背诵。最开始的时候，一定要坚持，每天早上1小时，持续一年。背诵不必贪多，一篇一篇的文章背诵即可，对每篇文章的词组，语法都要达到熟练掌握。如此操作，只要能够达到50篇高级文章的熟练掌握，则会发现阅读会有很大的进步。</p>
-<h3 id="反复看和听">反复看和听</h3><!-- http://www.zhihu.com/question/26424821/answer/32770859 --> 
-<p>同种材料反复研看，研听，例如将 老友记 看两遍。充分利用自己的空余时间，把一些Adudio Book或是podcast下载到手机中，在没事干的时候戴上耳机反复听。这里推荐一些材料：《哈利波特》1-7，《乔布斯传》，《人性的弱点》，VOA news等的MP3音频都是不错的材料。</p>
-<h3 id="多用">多用</h3><p>俗话说，孰能生巧，如果学习一门外语，都不运用，怎么能够掌握呢。所以多开口讲英文，浏览英文网站，看英文原著，就会慢慢的扩大自己的词汇量。如果之前的反复阅读的方法算是精读的话，此方法就是略读了，例如笔者经常使用英文浏览技术网站。当遇到不认识的词语词组，采用翻译软件进行一下翻译即可，这里推荐一下国内的有道翻译软件。另外经常看youtube上自己感兴趣的视频，对英语学习也是很有帮助的，目前google针对youtube上的视频进行了人工智能语音识别并配上了字幕。有一定英文基础的，开启youtube视频上的英文字幕功能。这样就可以锻炼英文听力，还可以扩大词汇量，最重要的是，看的视频都是自己感兴趣的。这样而来，学习英文就成为了一种乐趣，何乐而不为呢。</p>
-<h3 id="提升中文能力">提升中文能力</h3><p>提升英文阅读的同时，也要注意提升自己的中文水平。语言能够自如的表达，顺畅的翻译是需要两种语言都融汇贯通的。</p>
-<h3 id="(此文持续更新和总结中)">(此文持续更新和总结中)</h3>
+        <p>##安装crontab：<br>    apt-get install cron</p>
+<h2 id="crontab服务：">crontab服务：</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
+service cron <span class="built_in">start</span> <span class="comment">#启动</span>
+service cron restart <span class="comment">#重启</span>
+</code></pre><h2 id="按照语法要求配置crontab任务">按照语法要求配置crontab任务</h2><h3 id="crontab_语法规范">crontab 语法规范</h3><pre><code>{minute} {hour} {<span class="property">day</span>-<span class="keyword">of</span>-<span class="property">month</span>} {<span class="property">month</span>} {<span class="property">day</span>-<span class="keyword">of</span>-week} {full-path-<span class="keyword">to</span>-shell-<span class="keyword">script</span>} 
+</code></pre><p>案例：<br>每个工作日23:59都进行备份作业<br>    59 23 <em> </em> 1,2,3,4,5  shell /home/backup.sh<br>每一分钟执行一次python脚本：<br>    <em>/1 </em> <em> </em> * python /home/test.py</p>
+<h3 id="配置crontab任务">配置crontab任务</h3><h4 id="第一种方式">第一种方式</h4><p>a进入编辑环境: crontab -e<br>    <em>/1  </em>  <em>  </em>  <em>  echo “aaaa” &gt;&gt; /home/test.txt 
+    </em>/59 <em> </em> <em> </em> python /opt/test.py &gt;/dev/null 2&gt;&amp;1   # 59分钟执行一次python脚本，  &gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据<br>b 查看文件是否写入数据<br>tail -f /home/test.txt</p>
+<h4 id="第二种方式">第二种方式</h4><p>设置配置文件：<br>vim /etc/crontab<br>    <em>/1  </em>  <em>  </em>  * root echo “aaaa” &gt;&gt; /home/test.txt   # 每分钟执行一次，注意有用户存在</p>
+<h2 id="任务不执行，查看日志：">任务不执行，查看日志：</h2><p>开启日志：<br>1 修改rsyslog<br>    vim /etc/rsyslog.d/50-default.conf<br>    cron.*              /var/log/cron.log #将cron前面的注释符去掉<br>2 重启rsyslog<br>    service rsyslog  restart<br>3 查看日志<br>    cat /var/log/cron.log<br>    tail -n 100 /var/log/cron.log    #查看日志文件最新的100行</p>
+<h2 id="其余重要操作：">其余重要操作：</h2><p>查看命令手册：man 5 crontab<br>编辑Cron作业<br>crontab -e<br>对Cron作业进行列表<br>crontab -l<br>移除Cron作业<br>crontab -r</p>
+<p>问题：No MTA installed, discarding output<br>解决：去掉所有print打印到控制台的语句，或者使用&gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/05/13/如何掌握英文/" data-id="ciwvq7t2q0009akuz965o979d" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="ciwvq7t49000wakuzdozog98v" class="article-share-link">Share</a>
       
-        <a href="http://www.daviddone.com/2015/05/13/如何掌握英文/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -119,6 +125,8 @@
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+
     </footer>
   </div>
   
