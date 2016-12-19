@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Stay hungry,stay foolish. 记录学习成长点点滴滴.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.daviddone.com/"/>
-  <updated>2016-12-19T06:53:37.767Z</updated>
+  <updated>2016-12-19T07:12:01.147Z</updated>
   <id>http://www.daviddone.com/</id>
   
   <author>
@@ -19,9 +19,9 @@
     <link href="http://www.daviddone.com/2015/10/12/Ubuntu%E4%BD%BF%E7%94%A8crontab%E6%89%A7%E8%A1%8C%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
     <id>http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/</id>
     <published>2015-10-12T03:05:29.000Z</published>
-    <updated>2016-12-19T06:53:37.767Z</updated>
-    <content type="html"><![CDATA[<p>##安装crontab：<br>    apt-get install cron</p>
-<h2 id="crontab服务：">crontab服务：</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
+    <updated>2016-12-19T07:12:01.147Z</updated>
+    <content type="html"><![CDATA[<h2 id="安装crontab：">安装crontab：</h2><pre><code>apt-<span class="keyword">get</span> install cron
+</code></pre><h2 id="crontab服务：">crontab服务：</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
 service cron <span class="built_in">start</span> <span class="comment">#启动</span>
 service cron restart <span class="comment">#重启</span>
 </code></pre><h2 id="按照语法要求配置crontab任务">按照语法要求配置crontab任务</h2><h3 id="crontab_语法规范">crontab 语法规范</h3><pre><code>{minute} {hour} {<span class="property">day</span>-<span class="keyword">of</span>-<span class="property">month</span>} {<span class="property">month</span>} {<span class="property">day</span>-<span class="keyword">of</span>-week} {full-path-<span class="keyword">to</span>-shell-<span class="keyword">script</span>} 
@@ -34,8 +34,8 @@ service cron restart <span class="comment">#重启</span>
 <p>问题：No MTA installed, discarding output<br>解决：去掉所有print打印到控制台的语句，或者使用&gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>##安装crontab：<br>    apt-get install cron</p>
-<h2 id="crontab服务：">crontab服务：</h2><pre><code>service cron status <span class="comment"># 查看]]>
+    <![CDATA[<h2 id="安装crontab：">安装crontab：</h2><pre><code>apt-<span class="keyword">get</span> install cron
+</code></pre><h2 id="crontab服务：">crontab服务：<]]>
     </summary>
     
       <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
