@@ -91,14 +91,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="安装crontab：">安装crontab：</h2><pre><code>apt-<span class="keyword">get</span> install cron
-</code></pre><h2 id="crontab服务：">crontab服务：</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
+        <h2 id="安装crontab">安装crontab</h2><pre><code>apt-<span class="keyword">get</span> install cron
+</code></pre><h2 id="crontab服务">crontab服务</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
 service cron <span class="built_in">start</span> <span class="comment">#启动</span>
 service cron restart <span class="comment">#重启</span>
 </code></pre><h2 id="按照语法要求配置crontab任务">按照语法要求配置crontab任务</h2><h3 id="crontab_语法规范">crontab 语法规范</h3><pre><code>{minute} {hour} {<span class="property">day</span>-<span class="keyword">of</span>-<span class="property">month</span>} {<span class="property">month</span>} {<span class="property">day</span>-<span class="keyword">of</span>-week} {full-path-<span class="keyword">to</span>-shell-<span class="keyword">script</span>} 
 </code></pre><p>案例：<br>每个工作日23:59都进行备份作业<br>    59 23 <em> </em> 1,2,3,4,5  shell /home/backup.sh<br>每一分钟执行一次python脚本：<br>    <em>/1 </em> <em> </em> * python /home/test.py</p>
 <h3 id="配置crontab任务">配置crontab任务</h3><h4 id="第一种方式">第一种方式</h4><p>a进入编辑环境: crontab -e<br>    <em>/1  </em>  <em>  </em>  <em>  echo “aaaa” &gt;&gt; /home/test.txt 
-    </em>/59 <em> </em> <em> </em> python /opt/test.py &gt;/dev/null 2&gt;&amp;1   # 59分钟执行一次python脚本，  &gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据<br>b 查看文件是否写入数据<br>tail -f /home/test.txt</p>
+    </em>/59 <em> </em> <em> </em> python /opt/test.py &gt;/dev/null 2&gt;&amp;1   # 59分钟执行一次python脚本，  &gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据<br>b 查看文件是否写入数据<br>    tail -f /home/test.txt</p>
 <h4 id="第二种方式">第二种方式</h4><p>设置配置文件：<br>vim /etc/crontab<br>    <em>/1  </em>  <em>  </em>  * root echo “aaaa” &gt;&gt; /home/test.txt   # 每分钟执行一次，注意有用户存在</p>
 <h2 id="任务不执行，查看日志：">任务不执行，查看日志：</h2><p>开启日志：<br>1 修改rsyslog<br>    vim /etc/rsyslog.d/50-default.conf<br>    cron.*              /var/log/cron.log #将cron前面的注释符去掉<br>2 重启rsyslog<br>    service rsyslog  restart<br>3 查看日志<br>    cat /var/log/cron.log<br>    tail -n 100 /var/log/cron.log    #查看日志文件最新的100行</p>
 <h2 id="其余重要操作：">其余重要操作：</h2><p>查看命令手册：man 5 crontab<br>编辑Cron作业<br>crontab -e<br>对Cron作业进行列表<br>crontab -l<br>移除Cron作业<br>crontab -r</p>
@@ -107,7 +107,7 @@ service cron restart <span class="comment">#重启</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="ciwvqummz000wcouzh1r7ian7" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="ciwvqyt1o000wfsuz2gxud1sl" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -181,7 +181,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwvqummq000rcouzu4upj6cx" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="ciwvqyt1d000rfsuz0od53crq" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -251,7 +251,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwvqumnz001ccouzv34ydp5u" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="ciwvqyt2p001cfsuzl0fhoyi2" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -355,7 +355,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwvqumof001hcouzng79nkpx" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="ciwvqyt30001hfsuzwwuwuesr" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -434,7 +434,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwvqumos001lcouzjocvw71g" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="ciwvqyt38001lfsuzuqtn3gd0" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -513,7 +513,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwvqumm5000kcouz0mb6js56" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="ciwvqyt0z000kfsuz34lvkjhm" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -606,7 +606,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwvqumnl0018couzsxi2ep3k" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="ciwvqyt2d0018fsuz5r50l0nw" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
