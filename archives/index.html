@@ -121,7 +121,7 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="cix1jg97f00124kuzdawjoocu" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="cix1jnew30012csuzjb7msw0r" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -180,7 +180,8 @@ tar zxvf kafka_2<span class="number">.10</span>-<span class="number">0.9</span><
 cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>
 </code></pre><h2 id="kafka配置">kafka配置</h2><p>修改配置文件   config/server.properties  # 目录 /home/david/kafka_2.10-0.9.0.0/config<br>1 broker.id从0开始，后面其他节点配置1,2,3，即主节点david为0，其他节点依次为1,2,3。<br><img src="/images/kafka1.png" style="margin-left:0px"><br>2 zookeeper.connect=david:2181,david2:2181<br><img src="/images/kafka2.png" style="margin-left:0px"></p>
 <h2 id="kafka分发到其他集群节点上去">kafka分发到其他集群节点上去</h2><pre><code>scp -r kafka_2.<span class="number">10</span>-<span class="number">0.9</span>.<span class="number">0.0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
-</code></pre><h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
+</code></pre><p>注意:分发之后，需要修改config/server.properties文件中的broker.id。  </p>
+<h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
 <pre><code>sh  zkServer.sh start     <span class="preprocessor"># /home/david/zookeeper-<span class="number">3.3</span><span class="number">.6</span>/bin</span>
 </code></pre><p>2 启动kafka,分别启动各个节点</p>
 <pre><code>sh bin/kafka-server-start.sh config/server.properties &amp;    <span class="preprocessor">#　启动时候需要指定配置文件, &amp; 号是为了让在后台运行 ，目录/home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>/</span>
@@ -196,7 +197,7 @@ cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span c
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/" data-id="cix1jg968000k4kuzz755lmhv" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/" data-id="cix1jnev1000kcsuzfaqcri6k" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -274,7 +275,7 @@ cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span c
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="cix1jg97q00184kuzch2fej9j" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="cix1jnewg0018csuzee19wl48" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -334,7 +335,7 @@ cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span c
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cix1jg95z000e4kuz73kjhmc6" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cix1jneur000ecsuzsbamb20y" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -438,7 +439,7 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="cix1jg995001n4kuzohyburi1" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="cix1jnexz001ncsuzkkjeh7vc" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -512,7 +513,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="cix1jg973000x4kuza8xnmd8m" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="cix1jnevt000xcsuz00y8exh3" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -582,7 +583,7 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="cix1jg98o001i4kuz57g4sozd" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="cix1jnexm001icsuzk0sgm5sj" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -661,7 +662,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="cix1jg99l001r4kuz7e04p1fa" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="cix1jneyf001rcsuz1cd4t77i" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -740,7 +741,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="cix1jg96t000r4kuzxqjy1nlv" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="cix1jnevg000rcsuz5xxd4vcx" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -833,7 +834,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cix1jg989001e4kuzb6ctpdls" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cix1jnex0001ecsuz6h2npj8l" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
