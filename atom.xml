@@ -61,6 +61,43 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
   </entry>
   
   <entry>
+    <title><![CDATA[kafka集群搭建教程]]></title>
+    <link href="http://www.daviddone.com/2015/08/12/kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/"/>
+    <id>http://www.daviddone.com/2015/08/12/kafka集群搭建教程/</id>
+    <published>2015-08-12T03:05:29.000Z</published>
+    <updated>2016-12-23T08:31:36.910Z</updated>
+    <content type="html"><![CDATA[<h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通常采用ZooKeeper来协调kafka的消费者。简而言之：Kafka是一个专用于高性能，低延迟提交日志存储，复制和传播的分布式消息系统。<br>应用场景：实时计算系统的数据采集，也可以与flume一起用，flume侧重数据收集，Kafka侧重数据分发。</p>
+<h2 id="kafka安装">kafka安装</h2><pre><code>wget http:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/apache/kafka/0.9.0.0/kafka_2.10-0.9.0.0.tgz   # 下载</span>
+tar zxvf kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>.tgz    <span class="preprocessor"># 目录 /home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span></span>
+cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>
+</code></pre><h2 id="kafka配置">kafka配置</h2><p>修改配置文件   config/server.properties  # 目录 /home/david/kafka_2.10-0.9.0.0/config<br>1 broker.id从0开始，后面其他节点配置1,2,3，即主节点david为0，其他节点依次为1,2,3。<br><img src="/images/kafka1.png" style="margin-left:0px"><br>2 zookeeper.connect=david:2181,david2:2181<br><img src="/images/kafka2.png" style="margin-left:0px"></p>
+<h2 id="kafka分发到其他集群节点上去">kafka分发到其他集群节点上去</h2><pre><code>scp -r kafka_2.<span class="number">10</span>-<span class="number">0.9</span>.<span class="number">0.0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
+</code></pre><h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
+<pre><code>sh  zkServer.sh start     <span class="preprocessor"># /home/david/zookeeper-<span class="number">3.3</span><span class="number">.6</span>/bin</span>
+</code></pre><p>2 启动kafka,分别启动各个节点</p>
+<pre><code>sh bin/kafka-server-start.sh config/server.properties &amp;    <span class="preprocessor">#　启动时候需要指定配置文件, &amp; 号是为了让在后台运行 ，目录/home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>/</span>
+</code></pre><p>3 关闭kafka</p>
+<pre><code><span class="keyword">sh</span> bin/kafka-server-<span class="keyword">stop</span>.<span class="keyword">sh</span>
+</code></pre><h2 id="验证kafka">验证kafka</h2><p>1 在集群上创建topic</p>
+<pre><code><span class="comment">sh</span> <span class="comment">bin/kafka</span><span class="literal">-</span><span class="comment">topics</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">create</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">zookeeper</span> <span class="comment">david:2181</span><span class="string">,</span><span class="comment">david2:2181</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">replication</span><span class="literal">-</span><span class="comment">factor</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">partitions</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">topic</span> <span class="comment">test</span>
+</code></pre><p>2 在集群上查看topic</p>
+<pre><code>sh bin/kafka-topics.sh --<span class="built_in">list</span> --zookeeper david:<span class="number">2181</span>,david2:<span class="number">2181</span>
+</code></pre><p>显示结果：test</p>
+<p>kafka简介：<a href="https://en.wikipedia.org/wiki/Apache_Kafka" target="_blank" rel="external">https://en.wikipedia.org/wiki/Apache_Kafka</a><br>kafka官网：<a href="http://kafka.apache.org/intro" target="_blank" rel="external">http://kafka.apache.org/intro</a><br>kafka镜像资源：<a href="http://www.apache.org/dyn/closer.cgi/kafka" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/kafka</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低]]>
+    </summary>
+    
+      <category term="kafka" scheme="http://www.daviddone.com/tags/kafka/"/>
+    
+      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
+    
+      <category term="kafka" scheme="http://www.daviddone.com/categories/Big-Data/kafka/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Storm集群搭建教程]]></title>
     <link href="http://www.daviddone.com/2015/08/12/Storm%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/"/>
     <id>http://www.daviddone.com/2015/08/12/Storm集群搭建教程/</id>
@@ -101,43 +138,6 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
   </entry>
   
   <entry>
-    <title><![CDATA[kafka集群搭建教程]]></title>
-    <link href="http://www.daviddone.com/2015/08/12/kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/"/>
-    <id>http://www.daviddone.com/2015/08/12/kafka集群搭建教程/</id>
-    <published>2015-08-12T03:05:29.000Z</published>
-    <updated>2016-12-23T08:26:23.248Z</updated>
-    <content type="html"><![CDATA[<h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通常采用ZooKeeper来协调kafka的消费者。简而言之：Kafka是一个专用于高性能，低延迟提交日志存储，复制和传播的分布式消息系统。<br>应用场景：实时计算系统的数据采集，也可以与flume一起用，flume侧重数据收集，Kafka侧重数据分发。</p>
-<h2 id="kafka安装">kafka安装</h2><pre><code>wget http:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/apache/kafka/0.9.0.0/kafka_2.10-0.9.0.0.tgz   # 下载</span>
-tar zxvf kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>.tgz    <span class="preprocessor"># 目录 /home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span></span>
-cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>
-</code></pre><h2 id="kafka配置">kafka配置</h2><p>修改配置文件   config/server.properties  # 目录 /home/david/kafka_2.10-0.9.0.0/config<br>1 broker.id从0开始，后面其他节点配置1,2,3，即主节点david为0，其他节点依次为1,2,3。<br><img src="/images/kafka1.png" alt="图片"><br>2 zookeeper.connect=david:2181,david2:2181<br><img src="/images/kafka2.png" alt="图片"></p>
-<h2 id="kafka分发到其他集群节点上去">kafka分发到其他集群节点上去</h2><pre><code>scp -r kafka_2.<span class="number">10</span>-<span class="number">0.9</span>.<span class="number">0.0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
-</code></pre><h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
-<pre><code>sh  zkServer.sh start     <span class="preprocessor"># /home/david/zookeeper-<span class="number">3.3</span><span class="number">.6</span>/bin</span>
-</code></pre><p>2 启动kafka,分别启动各个节点</p>
-<pre><code>sh bin/kafka-server-start.sh config/server.properties &amp;    <span class="preprocessor">#　启动时候需要指定配置文件, &amp; 号是为了让在后台运行 ，目录/home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>/</span>
-</code></pre><p>3 关闭kafka</p>
-<pre><code><span class="keyword">sh</span> bin/kafka-server-<span class="keyword">stop</span>.<span class="keyword">sh</span>
-</code></pre><h2 id="验证kafka">验证kafka</h2><p>1 在集群上创建topic</p>
-<pre><code><span class="comment">sh</span> <span class="comment">bin/kafka</span><span class="literal">-</span><span class="comment">topics</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">create</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">zookeeper</span> <span class="comment">david:2181</span><span class="string">,</span><span class="comment">david2:2181</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">replication</span><span class="literal">-</span><span class="comment">factor</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">partitions</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">topic</span> <span class="comment">test</span>
-</code></pre><p>2 在集群上查看topic</p>
-<pre><code>sh bin/kafka-topics.sh --<span class="built_in">list</span> --zookeeper david:<span class="number">2181</span>,david2:<span class="number">2181</span>
-</code></pre><p>显示结果：test</p>
-<p>kafka简介：<a href="https://en.wikipedia.org/wiki/Apache_Kafka" target="_blank" rel="external">https://en.wikipedia.org/wiki/Apache_Kafka</a><br><a href="http://kafka.apache.org/intro" target="_blank" rel="external">http://kafka.apache.org/intro</a><br>kafka镜像资源：<a href="http://www.apache.org/dyn/closer.cgi/kafka" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/kafka</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低]]>
-    </summary>
-    
-      <category term="kafka" scheme="http://www.daviddone.com/tags/kafka/"/>
-    
-      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
-    
-      <category term="kafka" scheme="http://www.daviddone.com/categories/Big-Data/kafka/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[node++快捷键]]></title>
     <link href="http://www.daviddone.com/2015/07/12/node-%E5%BF%AB%E6%8D%B7%E9%94%AE/"/>
     <id>http://www.daviddone.com/2015/07/12/node-快捷键/</id>
@@ -156,6 +156,72 @@ cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span c
       <category term="Toolbox" scheme="http://www.daviddone.com/categories/Toolbox/"/>
     
       <category term="tools" scheme="http://www.daviddone.com/categories/Toolbox/tools/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Hadoop单机安装教程 hadoop2.X版本]]></title>
+    <link href="http://www.daviddone.com/2015/06/12/Hadoop%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%20hadoop2.X%E7%89%88%E6%9C%AC/"/>
+    <id>http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/</id>
+    <published>2015-06-12T03:05:29.000Z</published>
+    <updated>2016-12-14T05:11:29.161Z</updated>
+    <content type="html"><![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  “david”  # centos 7</p>
+<h3 id="修改hosts配置文件，修改对应主机名称">修改hosts配置文件，修改对应主机名称</h3><p>vim /etc/hosts<br>192.168.31.166   master  （必须）  # echo $HOSTNAME 查看主机名称</p>
+<h3 id="关闭防火墙_centos_6-4">关闭防火墙 centos 6.4</h3><p>service iptables status  #查看防火墙状态<br>service iptables stop  #关闭防火墙<br>chkconfig iptables –list #查看防火墙开机启动状态<br>chkconfig iptables off   #查看防火墙开机启动状态</p>
+<h3 id="关闭防火墙_centos_7">关闭防火墙 centos 7</h3><p>systemctl start firewalld  #启动firewall<br>systemctl stop firewalld   #停止firewall<br>systemctl status firewalld   # 查看防火墙状态</p>
+<h2 id="安装jdk_并设置环境变量(_参考《Linux安装Java》)">安装jdk 并设置环境变量( 参考《Linux安装Java》)</h2><p>注意java安装之后所在的文件夹，以及java_home</p>
+<h3 id="下载安装hadoop2-6-0">下载安装hadoop2.6.0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz&#10;tar -zxvf hadoop-2.6.0.tar.gz&#10;mv hadoop-2.6.0 /opt/hadoop</span><br></pre></td></tr></table></figure>
+<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>1配置hadoop  /opt/hadoop/etc/hadoop 文件下</p>
+<h4 id="第一个：hadoop-env-sh">第一个：hadoop-env.sh</h4><p>vim hadoop-env.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk #&#31532;27&#34892;</span><br></pre></td></tr></table></figure></p>
+<p>注意：查看环境变量：echo  $JAVA_HOME</p>
+<h4 id="第二个：core-site-xml">第二个：core-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HADOOP所使用的文件系统schema（URI），HDFS的老大（NameNode）的地址 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://192.168.31.166:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="comment">&lt;!-- 指定hadoop运行时产生文件的存储目录 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/tmp<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第三个：hdfs-site-xml">第三个：hdfs-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HDFS副本的数量 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第四个：mapred-site-xml">第四个：mapred-site.xml</h4><p>mv mapred-site.xml.template mapred-site.xml  # 首先合并<br>vim mapred-site.xml</p>
+<pre><code><span class="comment">&lt;!-- 指定mr运行在yarn上 --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><h4 id="第五个：yarn-site-xml">第五个：yarn-site.xml</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- &#25351;&#23450;YARN&#30340;&#32769;&#22823;&#65288;ResourceManager&#65289;&#30340;&#22320;&#22336; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.resourcemanager.hostname&#60;/name&#62;&#10;&#9;&#60;value&#62;master&#60;/value&#62;&#10;&#60;/property&#62;&#10;&#60;!-- reducer&#33719;&#21462;&#25968;&#25454;&#30340;&#26041;&#24335; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.nodemanager.aux-services&#60;/name&#62;&#10;&#9;&#60;value&#62;mapreduce_shuffle&#60;/value&#62;&#10; &#60;/property&#62;</span><br></pre></td></tr></table></figure>
+<p>注意：第一个配置参数hostname，需要配置192.168.1.10服务器 ，master</p>
+<h3 id="hadoop添加到环境变量">hadoop添加到环境变量</h3><p>vim /etc/profile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk  &#10;export HADOOP_HOME=/opt/hadoop&#10;export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure></p>
+<p>配置之后使其立马生效<br>source /etc/profile </p>
+<h3 id="格式化namenode_初始化">格式化namenode 初始化</h3><pre><code>hdfs namenode -<span class="built_in">format</span>    <span class="comment">#目录 /opt/hadoop/bin</span>
+</code></pre><p>注意：如果出现配置文件配置有误，这一步无法通过。</p>
+<h3 id="启动hadoop">启动hadoop</h3><pre><code>sbin/<span class="built_in">start</span>-dfs.sh    <span class="comment">#先启动HDFS 目录/opt/hadoop/</span>
+sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启动YARN</span>
+( 全部启动   sbin/<span class="built_in">start</span>-all.sh)
+</code></pre><p>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
+<h3 id="验证是否启动成功">验证是否启动成功</h3><p>使用jps命令验证<br>27408 NameNode<br>28218 Jps<br>27643 SecondaryNameNode<br>28066 NodeManager<br>27803 ResourceManager<br>27512 DataNode</p>
+<p><a href="http://192.168.31.166:50070" target="_blank" rel="external">http://192.168.31.166:50070</a> （HDFS管理界面）<br><a href="http://192.168.31.166:8088" target="_blank" rel="external">http://192.168.31.166:8088</a> （MR管理界面）</p>
+<h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
+<h3 id="免密登录：">免密登录：</h3><p>ssh-keygen -t rsa -P ‘’  一直回车即可。会生成公钥，私钥。公钥是给目标服务器的，例如A服务器想访问B服务器。就将A的公钥给B服务器，B服务器将其公钥并写入授权。相当于B把A给他的门安上了,A还留着独一无二的钥匙。</p>
+<h4 id="自身免密登录">自身免密登录</h4><p>cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys  # 将自己的公钥进行授权</p>
+<h4 id="A服务器免密访问B服务器">A服务器免密访问B服务器</h4><p>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到B服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # 写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
+<p>hadoop镜像地址：<a href="http://www.apache.org/dyn/closer.cgi/hadoop/common/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common/</a><br>ssh免密登录资料：<a href="http://chenlb.iteye.com/blog/211809" target="_blank" rel="external">http://chenlb.iteye.com/blog/211809</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  ]]>
+    </summary>
+    
+      <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
+    
+      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
+    
+      <category term="hadoop" scheme="http://www.daviddone.com/categories/Big-Data/hadoop/"/>
     
   </entry>
   
@@ -217,72 +283,6 @@ server<span class="number">.3</span>=<span class="number">192.168</span><span cl
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，]]>
-    </summary>
-    
-      <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
-    
-      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
-    
-      <category term="hadoop" scheme="http://www.daviddone.com/categories/Big-Data/hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Hadoop单机安装教程 hadoop2.X版本]]></title>
-    <link href="http://www.daviddone.com/2015/06/12/Hadoop%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%20hadoop2.X%E7%89%88%E6%9C%AC/"/>
-    <id>http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/</id>
-    <published>2015-06-12T03:05:29.000Z</published>
-    <updated>2016-12-14T05:11:29.161Z</updated>
-    <content type="html"><![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  “david”  # centos 7</p>
-<h3 id="修改hosts配置文件，修改对应主机名称">修改hosts配置文件，修改对应主机名称</h3><p>vim /etc/hosts<br>192.168.31.166   master  （必须）  # echo $HOSTNAME 查看主机名称</p>
-<h3 id="关闭防火墙_centos_6-4">关闭防火墙 centos 6.4</h3><p>service iptables status  #查看防火墙状态<br>service iptables stop  #关闭防火墙<br>chkconfig iptables –list #查看防火墙开机启动状态<br>chkconfig iptables off   #查看防火墙开机启动状态</p>
-<h3 id="关闭防火墙_centos_7">关闭防火墙 centos 7</h3><p>systemctl start firewalld  #启动firewall<br>systemctl stop firewalld   #停止firewall<br>systemctl status firewalld   # 查看防火墙状态</p>
-<h2 id="安装jdk_并设置环境变量(_参考《Linux安装Java》)">安装jdk 并设置环境变量( 参考《Linux安装Java》)</h2><p>注意java安装之后所在的文件夹，以及java_home</p>
-<h3 id="下载安装hadoop2-6-0">下载安装hadoop2.6.0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz&#10;tar -zxvf hadoop-2.6.0.tar.gz&#10;mv hadoop-2.6.0 /opt/hadoop</span><br></pre></td></tr></table></figure>
-<h3 id="伪分布式需要修改5个配置文件">伪分布式需要修改5个配置文件</h3><p>1配置hadoop  /opt/hadoop/etc/hadoop 文件下</p>
-<h4 id="第一个：hadoop-env-sh">第一个：hadoop-env.sh</h4><p>vim hadoop-env.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk #&#31532;27&#34892;</span><br></pre></td></tr></table></figure></p>
-<p>注意：查看环境变量：echo  $JAVA_HOME</p>
-<h4 id="第二个：core-site-xml">第二个：core-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HADOOP所使用的文件系统schema（URI），HDFS的老大（NameNode）的地址 --&gt;</span>
-<span class="tag">&lt;<span class="title">property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://192.168.31.166:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
-<span class="comment">&lt;!-- 指定hadoop运行时产生文件的存储目录 --&gt;</span>
-<span class="tag">&lt;<span class="title">property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/hadoop/tmp<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
-</code></pre><h4 id="第三个：hdfs-site-xml">第三个：hdfs-site.xml</h4><pre><code><span class="comment">&lt;!-- 指定HDFS副本的数量 --&gt;</span>
-<span class="tag">&lt;<span class="title">property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
-</code></pre><h4 id="第四个：mapred-site-xml">第四个：mapred-site.xml</h4><p>mv mapred-site.xml.template mapred-site.xml  # 首先合并<br>vim mapred-site.xml</p>
-<pre><code><span class="comment">&lt;!-- 指定mr运行在yarn上 --&gt;</span>
-<span class="tag">&lt;<span class="title">property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
-</code></pre><h4 id="第五个：yarn-site-xml">第五个：yarn-site.xml</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- &#25351;&#23450;YARN&#30340;&#32769;&#22823;&#65288;ResourceManager&#65289;&#30340;&#22320;&#22336; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.resourcemanager.hostname&#60;/name&#62;&#10;&#9;&#60;value&#62;master&#60;/value&#62;&#10;&#60;/property&#62;&#10;&#60;!-- reducer&#33719;&#21462;&#25968;&#25454;&#30340;&#26041;&#24335; --&#62;&#10;&#60;property&#62;&#10;&#9;&#60;name&#62;yarn.nodemanager.aux-services&#60;/name&#62;&#10;&#9;&#60;value&#62;mapreduce_shuffle&#60;/value&#62;&#10; &#60;/property&#62;</span><br></pre></td></tr></table></figure>
-<p>注意：第一个配置参数hostname，需要配置192.168.1.10服务器 ，master</p>
-<h3 id="hadoop添加到环境变量">hadoop添加到环境变量</h3><p>vim /etc/profile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk  &#10;export HADOOP_HOME=/opt/hadoop&#10;export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure></p>
-<p>配置之后使其立马生效<br>source /etc/profile </p>
-<h3 id="格式化namenode_初始化">格式化namenode 初始化</h3><pre><code>hdfs namenode -<span class="built_in">format</span>    <span class="comment">#目录 /opt/hadoop/bin</span>
-</code></pre><p>注意：如果出现配置文件配置有误，这一步无法通过。</p>
-<h3 id="启动hadoop">启动hadoop</h3><pre><code>sbin/<span class="built_in">start</span>-dfs.sh    <span class="comment">#先启动HDFS 目录/opt/hadoop/</span>
-sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启动YARN</span>
-( 全部启动   sbin/<span class="built_in">start</span>-all.sh)
-</code></pre><p>12095 NodeManager<br>12000 ResourceManager<br>6144 DataNode<br>12125 Jps<br>6392 SecondaryNameNode<br>6042 NameNode</p>
-<h3 id="验证是否启动成功">验证是否启动成功</h3><p>使用jps命令验证<br>27408 NameNode<br>28218 Jps<br>27643 SecondaryNameNode<br>28066 NodeManager<br>27803 ResourceManager<br>27512 DataNode</p>
-<p><a href="http://192.168.31.166:50070" target="_blank" rel="external">http://192.168.31.166:50070</a> （HDFS管理界面）<br><a href="http://192.168.31.166:8088" target="_blank" rel="external">http://192.168.31.166:8088</a> （MR管理界面）</p>
-<h3 id="上传文件到hdfs上">上传文件到hdfs上</h3><p>hdfs dfs -put slaves.sh hdfs://192.168.31.166:9000/ </p>
-<h3 id="免密登录：">免密登录：</h3><p>ssh-keygen -t rsa -P ‘’  一直回车即可。会生成公钥，私钥。公钥是给目标服务器的，例如A服务器想访问B服务器。就将A的公钥给B服务器，B服务器将其公钥并写入授权。相当于B把A给他的门安上了,A还留着独一无二的钥匙。</p>
-<h4 id="自身免密登录">自身免密登录</h4><p>cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys  # 将自己的公钥进行授权</p>
-<h4 id="A服务器免密访问B服务器">A服务器免密访问B服务器</h4><p>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到B服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # 写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
-<p>hadoop镜像地址：<a href="http://www.apache.org/dyn/closer.cgi/hadoop/common/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common/</a><br>ssh免密登录资料：<a href="http://chenlb.iteye.com/blog/211809" target="_blank" rel="external">http://chenlb.iteye.com/blog/211809</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="修改主机名和IP的映射关系（单机可选）">修改主机名和IP的映射关系（单机可选）</h2><h3 id="修改主机名">修改主机名</h3><p>hostname master   #centos 6.x<br>hostnamectl set-hostname  ]]>
     </summary>
     
       <category term="markdown" scheme="http://www.daviddone.com/tags/markdown/"/>
