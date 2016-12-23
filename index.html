@@ -121,7 +121,7 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="cix1iyjcf000wt0uz5bdcg061" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="cix1j6c3x000w74uz36xgpy7o" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -199,7 +199,7 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="cix1iyjcr0012t0uzikiqjxo2" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/" data-id="cix1j6c47001274uzhmbjngwd" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/08/12/Storm集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -218,6 +218,81 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Storm/">Storm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kafka集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/12/kafka集群搭建教程/" class="article-date">
+  <time datetime="2015-08-12T03:05:29.000Z" itemprop="datePublished">2015-08-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/kafka/">kafka</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/12/kafka集群搭建教程/">kafka集群搭建教程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通常采用ZooKeeper来协调kafka的消费者。简而言之：Kafka是一个专用于高性能，低延迟提交日志存储，复制和传播的分布式消息系统。<br>应用场景：实时计算系统的数据采集，也可以与flume一起用，flume侧重数据收集，Kafka侧重数据分发。</p>
+<h2 id="kafka安装">kafka安装</h2><pre><code>wget http:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/apache/kafka/0.9.0.0/kafka_2.10-0.9.0.0.tgz   # 下载</span>
+tar zxvf kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>.tgz    <span class="preprocessor"># 目录 /home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span></span>
+cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>
+</code></pre><h2 id="kafka配置">kafka配置</h2><p>修改配置文件   config/server.properties  # 目录 /home/david/kafka_2.10-0.9.0.0/config<br>1 broker.id从0开始，后面其他节点配置1,2,3，即主节点david为0，其他节点依次为1,2,3。<br><img src="/images/kafka1.png" alt="图片"><br>2 zookeeper.connect=david:2181,david2:2181<br><img src="/images/kafka2.png" alt="图片"></p>
+<h2 id="kafka分发到其他集群节点上去">kafka分发到其他集群节点上去</h2><pre><code>scp -r kafka_2.<span class="number">10</span>-<span class="number">0.9</span>.<span class="number">0.0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
+</code></pre><h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
+<pre><code>sh  zkServer.sh start     <span class="preprocessor"># /home/david/zookeeper-<span class="number">3.3</span><span class="number">.6</span>/bin</span>
+</code></pre><p>2 启动kafka,分别启动各个节点</p>
+<pre><code>sh bin/kafka-server-start.sh config/server.properties &amp;    <span class="preprocessor">#　启动时候需要指定配置文件, &amp; 号是为了让在后台运行 ，目录/home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>/</span>
+</code></pre><p>3 关闭kafka</p>
+<pre><code><span class="keyword">sh</span> bin/kafka-server-<span class="keyword">stop</span>.<span class="keyword">sh</span>
+</code></pre><h2 id="验证kafka">验证kafka</h2><p>1 在集群上创建topic</p>
+<pre><code><span class="comment">sh</span> <span class="comment">bin/kafka</span><span class="literal">-</span><span class="comment">topics</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">create</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">zookeeper</span> <span class="comment">david:2181</span><span class="string">,</span><span class="comment">david2:2181</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">replication</span><span class="literal">-</span><span class="comment">factor</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">partitions</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">topic</span> <span class="comment">test</span>
+</code></pre><p>2 在集群上查看topic</p>
+<pre><code>sh bin/kafka-topics.sh --<span class="built_in">list</span> --zookeeper david:<span class="number">2181</span>,david2:<span class="number">2181</span>
+</code></pre><p>显示结果：test</p>
+<p>kafka简介：<a href="https://en.wikipedia.org/wiki/Apache_Kafka" target="_blank" rel="external">https://en.wikipedia.org/wiki/Apache_Kafka</a><br><a href="http://kafka.apache.org/intro" target="_blank" rel="external">http://kafka.apache.org/intro</a><br>kafka镜像资源：<a href="http://www.apache.org/dyn/closer.cgi/kafka" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/kafka</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/" data-id="cix1j9k1s0000jwuz5icrevqo" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li></ul>
 
     </footer>
   </div>
@@ -259,7 +334,7 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cix1iyjb8000et0uzjraejkbn" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/07/12/node-快捷键/" data-id="cix1j6c27000e74uzli84sofc" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/07/12/node-快捷键/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -278,6 +353,150 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tools/">tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Zookeeper集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/12/Zookeeper集群搭建教程/" class="article-date">
+  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/zookeeper/">zookeeper</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/12/Zookeeper集群搭建教程/">Zookeeper集群搭建教程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Zookeeper简介:">Zookeeper简介:</h2><p>其英文意思是：动物园管理员，hadoop生态中的很多分布式应用都是小动物。zookeeper是用来集群管理，配置管理，锁服务等分布式协调服务的。分布式服务难以管理。我理解的zookeeper就是一个协调管理分布式节点的。比如，9台zookeeper集群可以管理1000台节点。zookeeper经常用来做Hbase的高可用，而zookeeper本身就是高可用的实力代表。zookeeper范围非常广，  只要想要保证集群 一致性和高可用  都需要使用到zookeeper，从hadoop到dubble。zookeeper集群通过内部选取方法确保zookeeper集群中始终都存在着Leader进行高可用。</p>
+<h2 id="Zookeeper安装">Zookeeper安装</h2><h3 id="1_下载解压">1 下载解压</h3><p>wget  <a href="http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz" target="_blank" rel="external">http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz</a><br>tar zxvf zookeeper-3.3.6.tar.gz</p>
+<h3 id="2_设置环境变量（可选）">2 设置环境变量（可选）</h3><h3 id="3_修改配置文件_zoo-cfg">3 修改配置文件  zoo.cfg</h3><p>初次使用ZooKeeper，需要将/home/david/zookeeper-3.3.6/conf目录下的zoo_sample.cfg文件重命名为zoo.cfg。 重命名代码：mv zoo_sample.cfg zoo.cfg<br>vim zoo.cfg,按照如下代码配置  </p>
+<pre><code>tickTime=<span class="number">2000</span>
+initLimit=<span class="number">10</span>
+syncLimit=<span class="number">5</span>
+dataDir=/home/data                        <span class="preprocessor"># 存放工作数据的临时的，更改为/home/data</span>
+clientPort=<span class="number">2181</span>
+server<span class="number">.0</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>:<span class="number">2888</span>:<span class="number">3888</span>       <span class="preprocessor"># 此为单机配置方案，集群配置参考如下 </span>
+</code></pre><h3 id="4_启动服务">4 启动服务</h3><p>sh  zkServer.sh start     # /home/david/zookeeper-3.3.6/bin目录下<br>sh  zkServer.sh stop   # 停止服务<br>sh  zkServer.sh  status  # 查看状态  启动成功的标志是：出现启动状态Mode: leader 或者follower<br>问题： 查看状态 之后，发现Error contacting service. It is probably not running. 这个时候在工作目录下建立myid文件，并写入状态码。</p>
+<h3 id="5_配置集群">5 配置集群</h3><p>vim zoo.cfg                #目录：home/david/zookeeper-3.3.6/conf</p>
+<pre><code>server<span class="number">.1</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>:<span class="number">2888</span>:<span class="number">3888</span> 
+server<span class="number">.2</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.159</span>:<span class="number">2888</span>:<span class="number">3888</span> 
+server<span class="number">.3</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>:<span class="number">2888</span>:<span class="number">3888</span> 
+</code></pre><p>工作数据存放 /home/data 文件夹下建立文件myid，不同服务器分别设置1 2 3　echo 1 &gt;&gt; myid<br>启动集群，分别启动各个节点：sh  zkServer.sh start  #  分别启动每台机器　需要启动三台<br>问题：配置集群之后，注意将防火墙关闭。如果遇到启动不成功的情况，查看日志/home/david/zookeeper-3.3.6/bin/zookeeper.out，然后进行排查即可。</p>
+<h3 id="6_客户端连接zookeeper">6 客户端连接zookeeper</h3><p>sh  zkClient.sh      # 服务器上保存1M以下的配置文件</p>
+<p>zookeeper 镜像资源下载路径：<a href="http://www.apache.org/dyn/closer.cgi/zookeeper/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/zookeeper/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="cix1j6c3m000r74uzawikn2kl" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Hadoop集群搭建hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/" class="article-date">
+  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/hadoop/">hadoop</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。</p>
+<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><pre><code><span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>    master   <span class="preprocessor">#  主机 </span>
+<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>   david    <span class="preprocessor"># 工作机 slave</span>
+</code></pre><p>退出登录，重新进来，测试：ping david  # master上操作</p>
+<h3 id="2_Master访问所有slave节点配置免密访问">2 Master访问所有slave节点配置免密访问</h3><p>ssh-keygen -t rsa -P ‘’   # master操作，一直回车即可<br>就将master的公钥给所有的slave服务器，slave服务器将其公钥写入授权。<br>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到slave服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # slave服务器写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
+<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>    localhost   # 保留master主机的localhost，使其同时作为datanode。<br>    david<br>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
+<h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
+<h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver</p>
+<h3 id="6_jps验证集群">6 jps验证集群　</h3><p>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
+<p>slave节点的服务：<br>4086 Jps<br>3812 DataNode<br>3927 NodeManager<br>注意：如果出现could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) ，这种情况是集群没能够搭建成功。删除掉hdfs工作数据文件，进行格式化之后hdfs namenode -format，重新启动，检查master节点是否有datanode，必须要有datanode。</p>
+<h2 id="集群的hdfs的使用">集群的hdfs的使用</h2><p>hdfs dfs -put /home/a.log hdfs://master:9000/   #将文件a.log 上传到hdfs上去。hdfs dfs命令也可以采用hadoop fs进行替换，在hadoop1.x中使用hadoop fs命令进行操作<br>hdfs dfs -ls /     #查看hdfs的所有目录, 或 hadoop fs -ls hdfs://master:9000/<br>hdfs dfs -mkdir -p /user/hadoop/david/test  #创建文件<br>hdfs dfs -mkdir -p /user/hadoop</p>
+<p>可通过web ui查看:  <a href="http://192.168.1.10:50070" target="_blank" rel="external">http://192.168.1.10:50070</a>   # 需要关闭防火墙  service firewalld stop<br><img src="/images/hadoop_cluster1.png" alt="图片"></p>
+<p>hadoop2.6.0版本官网集群：<a href="http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="external">http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="cix1j6c4z001c74uzh4u3li45" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
 
     </footer>
   </div>
@@ -363,153 +582,9 @@ sbin/<span class="built_in">start</span>-yarn.sh <span class="comment"># 再启�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="cix1iyjdp001ht0uzs1pqc9ch" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/" data-id="cix1j6c5g001h74uz44d72jey" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
-	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'daviddone';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Zookeeper集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/12/Zookeeper集群搭建教程/" class="article-date">
-  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/zookeeper/">zookeeper</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/12/Zookeeper集群搭建教程/">Zookeeper集群搭建教程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Zookeeper简介:">Zookeeper简介:</h2><p>其英文意思是：动物园管理员，hadoop生态中的很多分布式应用都是小动物。zookeeper是用来集群管理，配置管理，锁服务等分布式协调服务的。分布式服务难以管理。我理解的zookeeper就是一个协调管理分布式节点的。比如，9台zookeeper集群可以管理1000台节点。zookeeper经常用来做Hbase的高可用，而zookeeper本身就是高可用的实力代表。zookeeper范围非常广，  只要想要保证集群 一致性和高可用  都需要使用到zookeeper，从hadoop到dubble。zookeeper集群通过内部选取方法确保zookeeper集群中始终都存在着Leader进行高可用。</p>
-<h2 id="Zookeeper安装">Zookeeper安装</h2><h3 id="1_下载解压">1 下载解压</h3><p>wget  <a href="http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz" target="_blank" rel="external">http://apache.fayea.com/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz</a><br>tar zxvf zookeeper-3.3.6.tar.gz</p>
-<h3 id="2_设置环境变量（可选）">2 设置环境变量（可选）</h3><h3 id="3_修改配置文件_zoo-cfg">3 修改配置文件  zoo.cfg</h3><p>初次使用ZooKeeper，需要将/home/david/zookeeper-3.3.6/conf目录下的zoo_sample.cfg文件重命名为zoo.cfg。 重命名代码：mv zoo_sample.cfg zoo.cfg<br>vim zoo.cfg,按照如下代码配置  </p>
-<pre><code>tickTime=<span class="number">2000</span>
-initLimit=<span class="number">10</span>
-syncLimit=<span class="number">5</span>
-dataDir=/home/data                        <span class="preprocessor"># 存放工作数据的临时的，更改为/home/data</span>
-clientPort=<span class="number">2181</span>
-server<span class="number">.0</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>:<span class="number">2888</span>:<span class="number">3888</span>       <span class="preprocessor"># 此为单机配置方案，集群配置参考如下 </span>
-</code></pre><h3 id="4_启动服务">4 启动服务</h3><p>sh  zkServer.sh start     # /home/david/zookeeper-3.3.6/bin目录下<br>sh  zkServer.sh stop   # 停止服务<br>sh  zkServer.sh  status  # 查看状态  启动成功的标志是：出现启动状态Mode: leader 或者follower<br>问题： 查看状态 之后，发现Error contacting service. It is probably not running. 这个时候在工作目录下建立myid文件，并写入状态码。</p>
-<h3 id="5_配置集群">5 配置集群</h3><p>vim zoo.cfg                #目录：home/david/zookeeper-3.3.6/conf</p>
-<pre><code>server<span class="number">.1</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>:<span class="number">2888</span>:<span class="number">3888</span> 
-server<span class="number">.2</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.159</span>:<span class="number">2888</span>:<span class="number">3888</span> 
-server<span class="number">.3</span>=<span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>:<span class="number">2888</span>:<span class="number">3888</span> 
-</code></pre><p>工作数据存放 /home/data 文件夹下建立文件myid，不同服务器分别设置1 2 3　echo 1 &gt;&gt; myid<br>启动集群，分别启动各个节点：sh  zkServer.sh start  #  分别启动每台机器　需要启动三台<br>问题：配置集群之后，注意将防火墙关闭。如果遇到启动不成功的情况，查看日志/home/david/zookeeper-3.3.6/bin/zookeeper.out，然后进行排查即可。</p>
-<h3 id="6_客户端连接zookeeper">6 客户端连接zookeeper</h3><p>sh  zkClient.sh      # 服务器上保存1M以下的配置文件</p>
-<p>zookeeper 镜像资源下载路径：<a href="http://www.apache.org/dyn/closer.cgi/zookeeper/" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/zookeeper/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/" data-id="cix1iyjc7000rt0uzpft2niah" class="article-share-link">Share</a>
-      
-        <a href="http://www.daviddone.com/2015/06/12/Zookeeper集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
-	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'daviddone';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Hadoop集群搭建hadoop2.X版本" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/" class="article-date">
-  <time datetime="2015-06-12T03:05:29.000Z" itemprop="datePublished">2015-06-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/hadoop/">hadoop</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/12/Hadoop集群搭建hadoop2.X版本/">Hadoop集群搭建hadoop2.X版本</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="hadoop集群简介">hadoop集群简介</h2><p>hadoop集群是多台hadoop机器进行分布式架构。hadoop伪分布式指的是在单机进行架构。测试环境，可以采用VMware虚拟机 –&gt;管理–&gt; 完整克隆的方式，搭建几台centos服务器，并在每台机器上安装好hadoop单机节点，针对每台机器进行hadoop安装，可以选择逐一安装，也可以采用scp命令进行拷贝。</p>
-<h2 id="hadoop集群搭建">hadoop集群搭建</h2><h3 id="1_每个节点修改hosts文件_vim_/etc/hosts">1 每个节点修改hosts文件 vim /etc/hosts</h3><pre><code><span class="number">192.168</span><span class="number">.1</span><span class="number">.10</span>    master   <span class="preprocessor">#  主机 </span>
-<span class="number">192.168</span><span class="number">.1</span><span class="number">.170</span>   david    <span class="preprocessor"># 工作机 slave</span>
-</code></pre><p>退出登录，重新进来，测试：ping david  # master上操作</p>
-<h3 id="2_Master访问所有slave节点配置免密访问">2 Master访问所有slave节点配置免密访问</h3><p>ssh-keygen -t rsa -P ‘’   # master操作，一直回车即可<br>就将master的公钥给所有的slave服务器，slave服务器将其公钥写入授权。<br>scp -r /root/.ssh/id_rsa.pub root@192.168.1.10:/home/   # 远程拷贝到slave服务器 home目录下<br>cat /home/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys    # slave服务器写入授权<br>chmod 600 /root/.ssh/authorized_keys     # ll 查看权限，不足的时候赋予权限</p>
-<h3 id="3_配置slaves文件">3 配置slaves文件</h3><p>vim slaves #  master主机 目录 /opt/hadoop/etc/hadoop/<br>    localhost   # 保留master主机的localhost，使其同时作为datanode。<br>    david<br>注意：工作机david需要修改工作机相关信息：1 core-site.xml  中的dfs主机，目录为/opt/hadoop/etc/hadoop/  2 删掉data临时数据：/home/hadoop/tmp，删该文件夹的所有文件 rm -rf /home/hadoop/tmp  3 yarn-site.xml的主机地址 4 将hdfs-site.xml，dfs.replication可设置为1，datanode每个节点只能存放一个副本 .  5 所有修改完毕之后需要hdfs namenode -format,目录 /opt/hadoop/bin</p>
-<h3 id="4_启动集群">4 启动集群</h3><p>start-dfs.sh   # 目录/opt/hadoop/sbin    会提示启动工作机davd<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver   # 开启MapReduce JobHistory Server<br>启动master节点即可，slave节点在master节点启动之后会自动启动。</p>
-<h3 id="5_关闭集群">5 关闭集群</h3><p>stop-yarn.sh<br>stop-dfs.sh<br>mr-jobhistory-daemon.sh stop historyserver</p>
-<h3 id="6_jps验证集群">6 jps验证集群　</h3><p>master节点服务：<br>6606 NameNode<br>7236 Jps<br>6779 SecondaryNameNode<br>6941 ResourceManager<br>3636 JobHistoryServer</p>
-<p>slave节点的服务：<br>4086 Jps<br>3812 DataNode<br>3927 NodeManager<br>注意：如果出现could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) ，这种情况是集群没能够搭建成功。删除掉hdfs工作数据文件，进行格式化之后hdfs namenode -format，重新启动，检查master节点是否有datanode，必须要有datanode。</p>
-<h2 id="集群的hdfs的使用">集群的hdfs的使用</h2><p>hdfs dfs -put /home/a.log hdfs://master:9000/   #将文件a.log 上传到hdfs上去。hdfs dfs命令也可以采用hadoop fs进行替换，在hadoop1.x中使用hadoop fs命令进行操作<br>hdfs dfs -ls /     #查看hdfs的所有目录, 或 hadoop fs -ls hdfs://master:9000/<br>hdfs dfs -mkdir -p /user/hadoop/david/test  #创建文件<br>hdfs dfs -mkdir -p /user/hadoop</p>
-<p>可通过web ui查看:  <a href="http://192.168.1.10:50070" target="_blank" rel="external">http://192.168.1.10:50070</a>   # 需要关闭防火墙  service firewalld stop<br><img src="/images/hadoop_cluster1.png" alt="图片"></p>
-<p>hadoop2.6.0版本官网集群：<a href="http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="external">http://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/ClusterSetup.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/" data-id="cix1iyjde001ct0uz9rxw56mk" class="article-share-link">Share</a>
-      
-        <a href="http://www.daviddone.com/2015/06/12/Hadoop集群搭建hadoop2.X版本/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -586,7 +661,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="cix1iyjdx001lt0uzd2ejds53" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/" data-id="cix1j6c5p001l74uzazqednnz" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/12/Centos 6.x 安装Redis/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -665,7 +740,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="cix1iyjbq000kt0uzmfgtgh56" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/11/dubbo搭建教程/" data-id="cix1j6c2w000k74uz7wa7u8en" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/11/dubbo搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -758,7 +833,7 @@ redis_git_sha1:<span class="number">00000000</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cix1iyjd10018t0uzzazj323a" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/MarkDown简明教材/" data-id="cix1j6c4k001874uziduzpuoi" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/MarkDown简明教材/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -785,93 +860,6 @@ redis_git_sha1:<span class="number">00000000</span>
 
 
   
-    <article id="post-搭建博客" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/10/搭建博客/" class="article-date">
-  <time datetime="2015-06-10T02:12:34.000Z" itemprop="datePublished">2015-06-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Toolbox/">Toolbox</a>►<a class="article-category-link" href="/categories/Toolbox/Hexo/">Hexo</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/10/搭建博客/">使用Github搭建Hexo博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="目录">目录</h3><p></p><p><br>    1：Hexo简介<br>    2：Hexo在本地安装<br>    3：Github分配博客项目空间<br>    4：发布Hexo到Github上<br>    5：绑定个性化域名<br>    6：个性化配置<br>    7：使用MD创建第一篇博客<br>    8：问题与结论<br></p><p></p>
-<h2 id="1：Hexo简介">1：Hexo简介</h2><p><img src="/images/hexo_info.png" alt=""></p>
-<p></p><p><br>Hexo是一款轻量级的静态博客框架，基于Node.js 。截止目前，在Github该项目的star数量已经超过6000,由此可见其受欢迎的程度。<a href="https://hexo.io/" target="_blank" rel="external">Hexo的官网</a>，通过简约醒目的风格向我们展现了使用Hexo的原因。Blazing Fast，Markdown Support，One-Command Deployment，Various Plugins。由于Github拥有支持Node和Markdown的Github pages服务，所以我们可以在Github上便捷的搭建免费的hexo博客站点。<br></p><p></p>
-<h2 id="2：Hexo在本地安装">2：Hexo在本地安装</h2><p>在本地搭建Hexo博客需要先安装Git和Node.js。笔者采用的是windowx64，所以下载<a href="https://git-for-windows.github.io/" target="_blank" rel="external">windows版Git</a>即可,然后下载安装<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>  即可。下面进入Hexo在本地搭建环节。</p>
-<h3 id="安装Hexo">安装Hexo</h3><p>在本地磁盘下新建Hexo文件夹，如（D:\Hexo），点击右键，选择Git bush，然后执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure></p>
-<p>会得到hexo博客需要的所有目录文件。</p>
-<h3 id="安装依赖包">安装依赖包</h3><p>执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
-<h3 id="生成博客与部署：">生成博客与部署：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate&#10;hexo server</span><br></pre></td></tr></table></figure>
-<p>执行hexo server之后，会有如下提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure></p>
-<p>则通过本地IP采用127.0.0.1：4000即可访问。如下图，则表示本地安装成功：<br><img src="/images/hexo_install_success.png" alt=""></p>
-<h2 id="3：Github分配博客项目空间">3：Github分配博客项目空间</h2><p>在自己Github主页右下角，创建一个新的repository。命名规则username.github.io;注意username更换为自己的github账号，如笔者的新repository为daviddone.github.io。<br><img src="/images/hexo_github.png" alt=""></p>
-<h2 id="4：发布Hexo到github上">4：发布Hexo到github上</h2><p>编辑_config.yml （D:\Hexo中）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deploy:&#10;  type: git&#10;  repository: git@github.com:daviddone/daviddone.github.io.git&#10;  branch: master</span><br></pre></td></tr></table></figure></p>
-<p>请注意：repository必须填写SSH的路径，不能填写：<br><a href="https://github.com/daviddone/daviddone.github.io.git" target="_blank" rel="external">https://github.com/daviddone/daviddone.github.io.git</a><br>执行下列指令，可完成部署<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate&#10;ssh -T git@github.com&#10;hexo deploy</span><br></pre></td></tr></table></figure></p>
-<h2 id="5：绑定个性化域名">5：绑定个性化域名</h2><h3 id="DNS服务商设置：">DNS服务商设置：</h3><p><img src="/images/hexo_dns1.png" alt=""><br><img src="/images/hexo_dns2.png" alt=""></p>
-<h3 id="域名服务商万网设置：">域名服务商万网设置：</h3><p><img src="/images/hexo_cname.png" alt=""><br>修改完毕之后查看域名信息确认,如下：<br><img src="/images/hexo_cname_confirm.png" alt=""></p>
-<h3 id="GitHub和Hexo设置:">GitHub和Hexo设置:</h3><p>在D:\Hexo\source新建文件名CNAME文件,然后编辑如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">www.daviddone.com</span><br></pre></td></tr></table></figure></p>
-<p>然后更新Github，会发现在repository的根目录下会出现CNAME文件夹</p>
-<p>注意域名解析有一定的延迟，等到生效时，访问www.daviddone.com即可查看，Github博客已与域名绑定。至此，博客的简单搭建完毕。</p>
-<h2 id="6：个性化配置">6：个性化配置</h2><h3 id="自定义网站主题：">自定义网站主题：</h3><p>克隆喜欢的主题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ppoffice/hexo-theme-hueman.git themes/hueman</span><br></pre></td></tr></table></figure></p>
-<p>在_config.yml中配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Extensions &#25193;&#23637;&#65306;&#25554;&#20214;&#21644;&#30382;&#32932;&#10;## Plugins: http://hexo.io/plugins/&#10;## Themes: http://hexo.io/themes/&#10;theme: hueman</span><br></pre></td></tr></table></figure></p>
-<h3 id="Disqus评论系统">Disqus评论系统</h3><p>访问<a href="http://disqus.com/" target="_blank" rel="external">Disqus官网</a>,申请一个shortname,然后填写到_config.yml中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disqus_shortname: daviddone</span><br></pre></td></tr></table></figure></p>
-<p>具体操作如下，进入Disqus后台后：<br><img src="/images/hexo_add_discuss.png" alt=""><br>选择 add disqus to site，<br>如下填写相关信息，Disqus会生成代码Universal code<br><img src="/images/hexo_create_discuss_a.png" alt=""><br>将代码拷贝到：D:\Hexo\themes\hueman\layout_partial\artical.ejs中，拷贝范围如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;% if (post.comments &#38;&#38; config.disqus_shortname)&#123; %&#62;&#10;        &#60;a href=&#34;&#60;%- post.permalink %&#62;#disqus_thread&#34; class=&#34;article-comment-link&#34;&#62;Comments&#60;/a&#62;&#10;&#60;!-- begin--&#62;&#9;&#9;&#10;&#60;div id=&#34;disqus_thread&#34;&#62;&#60;/div&#62;&#10;&#60;script type=&#34;text/javascript&#34;&#62;&#10;    /* * * CONFIGURATION VARIABLES * * */&#10;    var disqus_shortname = &#39;daviddone&#39;;&#10;    &#10;    /* * * DON&#39;T EDIT BELOW THIS LINE * * */&#10;    (function() &#123;&#10;        var dsq = document.createElement(&#39;script&#39;); dsq.type = &#39;text/javascript&#39;; dsq.async = true;&#10;        dsq.src = &#39;//&#39; + disqus_shortname + &#39;.disqus.com/embed.js&#39;;&#10;        (document.getElementsByTagName(&#39;head&#39;)[0] || document.getElementsByTagName(&#39;body&#39;)[0]).appendChild(dsq);&#10;    &#125;)();&#10;&#60;/script&#62;&#10;&#60;noscript&#62;Please enable JavaScript to view the &#60;a href=&#34;https://disqus.com/?ref_noscript&#34; rel=&#34;nofollow&#34;&#62;comments powered by Disqus.&#60;/a&#62;&#60;/noscript&#62;&#10;&#60;!--end--&#62;&#10;&#60;% &#125; %&#62;&#10;&#60;%- partial(&#39;post/tag&#39;) %&#62;</span><br></pre></td></tr></table></figure></p>
-<p>同时也可使用国内多说评论系统，可以<a href="http://dev.duoshuo.com/threads/541d3b2b40b5abcd2e4df0e9" target="_blank" rel="external">参考教材</a></p>
-<h3 id="RSS订阅插件">RSS订阅插件</h3><p>执行如下代码，安装插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure></p>
-<h2 id="7:_使用MD创建第一篇博客：">7: 使用MD创建第一篇博客：</h2><p>执行命令创建文章：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &#25645;&#24314;&#21338;&#23458;</span><br></pre></td></tr></table></figure></p>
-<p>在D:\Hexo\source_posts目录下出现 搭建博客.md 文件，然后以MarkDown语法编辑文章。编辑完毕之后，执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
-<p>查看效果<br>介绍文章语法：<br>生成.md文件之后，每篇文章文首添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title: &#25645;&#24314;&#21338;&#23458;&#10;date: 2015-10-10 10:12:34&#10;tags:&#10;- &#26631;&#35760;&#19968; &#10;- &#26631;&#35760;&#20108;&#10;categories:&#10;- &#20998;&#31867;&#19968;&#10;- &#20998;&#31867;&#20108;&#10;---</span><br></pre></td></tr></table></figure></p>
-<p>接下来就可以写正文,正文遵循MarkDown语法，可参考其<a href="https://guides.github.com/features/mastering-markdown" target="_blank" rel="external">MD官方教材</a></p>
-<h2 id="8:_问题与结论">8: 问题与结论</h2><p>1：部署的时候出现错误：<br><img src="/images/hexo_error1.png" alt=""><br>原因：将repository中的SSH路径写为了Https路径。<br>2:初次使用请配置SSH keys<br>参考<a href="https://help.github.com/articles/generating-ssh-keys/" target="_blank" rel="external">官方教材</a><br>配置完毕之后，在每次push之前执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
-<p>即可获取权限</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cix1iyja20000t0uzf9g01uvw" class="article-share-link">Share</a>
-      
-        <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
-	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'daviddone';
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo教材/">Hexo教材</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标记二/">标记二</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -885,7 +873,7 @@ redis_git_sha1:<span class="number">00000000</span>
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Storm/">Storm</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/crontab/">crontab</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Storm/">Storm</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/kafka/">kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/crontab/">crontab</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -894,7 +882,7 @@ redis_git_sha1:<span class="number">00000000</span>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Storm/">Storm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Storm/">Storm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/">kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -903,7 +891,7 @@ redis_git_sha1:<span class="number">00000000</span>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Storm/" style="font-size: 10px;">Storm</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
+      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Storm/" style="font-size: 10px;">Storm</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
     </div>
   </div>
 
@@ -912,7 +900,7 @@ redis_git_sha1:<span class="number">00000000</span>
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -932,11 +920,11 @@ redis_git_sha1:<span class="number">00000000</span>
           </li>
         
           <li>
-            <a href="/2015/07/12/node-快捷键/">node++快捷键</a>
+            <a href="/2015/08/12/kafka集群搭建教程/">kafka集群搭建教程</a>
           </li>
         
           <li>
-            <a href="/2015/06/12/Hadoop单机安装教程 hadoop2.X版本/">Hadoop单机安装教程 hadoop2.X版本</a>
+            <a href="/2015/07/12/node-快捷键/">node++快捷键</a>
           </li>
         
           <li>

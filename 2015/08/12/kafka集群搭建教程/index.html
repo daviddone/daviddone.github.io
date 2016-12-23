@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Category: Linux | David Done 博客</title>
+  <title>kafka集群搭建教程 | David Done 博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="daviddone | Android">
-<meta property="og:type" content="website">
-<meta property="og:title" content="David Done 博客">
-<meta property="og:url" content="http://www.daviddone.com/categories/Linux/index.html">
+  <meta name="description" content="kafka简介Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka集群搭建教程">
+<meta property="og:url" content="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/index.html">
 <meta property="og:site_name" content="David Done 博客">
-<meta property="og:description" content="daviddone | Android">
+<meta property="og:description" content="kafka简介Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通">
+<meta property="og:image" content="http://www.daviddone.com/images/kafka1.png">
+<meta property="og:image" content="http://www.daviddone.com/images/kafka2.png">
+<meta property="og:updated_time" content="2016-12-23T08:26:23.248Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="David Done 博客">
-<meta name="twitter:description" content="daviddone | Android">
+<meta name="twitter:title" content="kafka集群搭建教程">
+<meta name="twitter:description" content="kafka简介Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通">
   
     <link rel="alternative" href="/atom.xml" title="David Done 博客" type="application/atom+xml">
   
@@ -63,16 +66,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Ubuntu使用crontab执行定时任务" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-kafka集群搭建教程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/10/12/Ubuntu使用crontab执行定时任务/" class="article-date">
-  <time datetime="2015-10-12T03:05:29.000Z" itemprop="datePublished">2015-10-12</time>
+    <a href="/2015/08/12/kafka集群搭建教程/" class="article-date">
+  <time datetime="2015-08-12T03:05:29.000Z" itemprop="datePublished">2015-08-12</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/crontab/">crontab</a>
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/kafka/">kafka</a>
   </div>
 
   </div>
@@ -82,8 +83,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/12/Ubuntu使用crontab执行定时任务/">Ubuntu使用crontab执行定时任务</a>
+    <h1 class="article-title" itemprop="name">
+      kafka集群搭建教程
     </h1>
   
 
@@ -91,39 +92,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="安装crontab">安装crontab</h2><pre><code>apt-<span class="keyword">get</span> install cron
-</code></pre><h2 id="crontab服务">crontab服务</h2><pre><code>service cron status <span class="comment"># 查看状态</span>
-service cron <span class="built_in">start</span> <span class="comment">#启动</span>
-service cron restart <span class="comment">#重启</span>
-</code></pre><h2 id="按照语法要求配置crontab任务">按照语法要求配置crontab任务</h2><h3 id="crontab_语法规范">crontab 语法规范</h3><pre><code>{minute} {hour} {<span class="property">day</span>-<span class="keyword">of</span>-<span class="property">month</span>} {<span class="property">month</span>} {<span class="property">day</span>-<span class="keyword">of</span>-week} {full-path-<span class="keyword">to</span>-shell-<span class="keyword">script</span>} 
-</code></pre><p>案例：<br>每个工作日23:59都进行备份作业</p>
-<pre><code><span class="number">59</span> <span class="number">23</span> * * <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>  shell /home/backup.sh  
-</code></pre><p>每一分钟执行一次python脚本：</p>
-<pre><code><span class="keyword">*</span>/1 <span class="keyword">*</span> <span class="keyword">*</span> <span class="keyword">*</span> <span class="keyword">*</span> python /home/test.py
-</code></pre><h3 id="配置crontab任务">配置crontab任务</h3><h4 id="方案一_当前用户配置定时任务">方案一 当前用户配置定时任务</h4><p>a进入编辑环境: crontab -e</p>
-<pre><code><span class="keyword">*</span>/1  <span class="keyword">*</span>  <span class="keyword">*</span>  <span class="keyword">*</span>  <span class="keyword">*</span>  echo <span class="string">"aaaa"</span> &gt;&gt; /home/test.txt 
-<span class="keyword">*</span>/59 <span class="keyword">*</span> <span class="keyword">*</span> <span class="keyword">*</span> <span class="keyword">*</span> python /opt/test.py &gt;/dev/null 2&gt;&amp;1   <span class="comment"># 59分钟执行一次python脚本，  &gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据</span>
-</code></pre><p>b 查看文件是否写入数据</p>
-<pre><code>tail <span class="operator">-f</span> /home/test.txt
-</code></pre><h4 id="方案二_为指定用户配置定时任务">方案二 为指定用户配置定时任务</h4><p>设置配置文件：<br>vim /etc/crontab</p>
-<pre><code><span class="keyword">*</span>/1  <span class="keyword">*</span>  <span class="keyword">*</span>  <span class="keyword">*</span>  <span class="keyword">*</span> root echo <span class="string">"aaaa"</span> &gt;&gt; /home/test.txt   <span class="comment"># 每分钟执行一次，注意有用户存在</span>
-</code></pre><h2 id="任务不执行，查看日志：">任务不执行，查看日志：</h2><p>开启日志：<br>1 修改rsyslog</p>
-<pre><code>vim /etc/rsyslog.d/<span class="number">50</span>-<span class="keyword">default</span>.conf 
-cron.*              /var/<span class="built_in">log</span>/cron.<span class="built_in">log</span> <span class="preprocessor">#将cron前面的注释符去掉</span>
-</code></pre><p>2 重启rsyslog</p>
-<pre><code><span class="title">service</span> rsyslog  restart 
-</code></pre><p>3 查看日志</p>
-<pre><code><span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/cron.<span class="keyword">log</span> 
-tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span class="keyword">log</span>/cron.<span class="keyword">log</span>    #查看日志文件最新的100行
-</code></pre><h2 id="其余重要操作：">其余重要操作：</h2><p>查看命令手册：man 5 crontab<br>编辑Cron作业<br>crontab -e<br>对Cron作业进行列表<br>crontab -l<br>移除Cron作业<br>crontab -r</p>
-<p>问题：No MTA installed, discarding output<br>解决：去掉所有print打印到控制台的语句，或者使用&gt;/dev/null 2&gt;&amp;1代表不向控制台输出数据。</p>
+        <h2 id="kafka简介">kafka简介</h2><p>Apache Kafka是由Apache Software Foundation开发的一个开源消息队列项目，用Scala编写，最初由LinkedIn开发，并于2011年初开源。 该项目旨在提供一个统一的，高吞吐量，低延迟的平台来处理实时数据馈送。 它本质上是一个“大规模可扩展的pub / sub消息队列构建为分布式事务日志”，如此优点使得其对企业基础设施处理流数据非常有价值。同时，通常采用ZooKeeper来协调kafka的消费者。简而言之：Kafka是一个专用于高性能，低延迟提交日志存储，复制和传播的分布式消息系统。<br>应用场景：实时计算系统的数据采集，也可以与flume一起用，flume侧重数据收集，Kafka侧重数据分发。</p>
+<h2 id="kafka安装">kafka安装</h2><pre><code>wget http:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/apache/kafka/0.9.0.0/kafka_2.10-0.9.0.0.tgz   # 下载</span>
+tar zxvf kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>.tgz    <span class="preprocessor"># 目录 /home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span></span>
+cd kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>
+</code></pre><h2 id="kafka配置">kafka配置</h2><p>修改配置文件   config/server.properties  # 目录 /home/david/kafka_2.10-0.9.0.0/config<br>1 broker.id从0开始，后面其他节点配置1,2,3，即主节点david为0，其他节点依次为1,2,3。<br><img src="/images/kafka1.png" alt="图片"><br>2 zookeeper.connect=david:2181,david2:2181<br><img src="/images/kafka2.png" alt="图片"></p>
+<h2 id="kafka分发到其他集群节点上去">kafka分发到其他集群节点上去</h2><pre><code>scp -r kafka_2.<span class="number">10</span>-<span class="number">0.9</span>.<span class="number">0.0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david/</span>
+</code></pre><h2 id="启动服务，分别启动每台kafka">启动服务，分别启动每台kafka</h2><p>1启动zookeeper，分别启动各个节点</p>
+<pre><code>sh  zkServer.sh start     <span class="preprocessor"># /home/david/zookeeper-<span class="number">3.3</span><span class="number">.6</span>/bin</span>
+</code></pre><p>2 启动kafka,分别启动各个节点</p>
+<pre><code>sh bin/kafka-server-start.sh config/server.properties &amp;    <span class="preprocessor">#　启动时候需要指定配置文件, &amp; 号是为了让在后台运行 ，目录/home/david/kafka_2<span class="number">.10</span>-<span class="number">0.9</span><span class="number">.0</span><span class="number">.0</span>/</span>
+</code></pre><p>3 关闭kafka</p>
+<pre><code><span class="keyword">sh</span> bin/kafka-server-<span class="keyword">stop</span>.<span class="keyword">sh</span>
+</code></pre><h2 id="验证kafka">验证kafka</h2><p>1 在集群上创建topic</p>
+<pre><code><span class="comment">sh</span> <span class="comment">bin/kafka</span><span class="literal">-</span><span class="comment">topics</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">create</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">zookeeper</span> <span class="comment">david:2181</span><span class="string">,</span><span class="comment">david2:2181</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">replication</span><span class="literal">-</span><span class="comment">factor</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">partitions</span> <span class="comment">1</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">topic</span> <span class="comment">test</span>
+</code></pre><p>2 在集群上查看topic</p>
+<pre><code>sh bin/kafka-topics.sh --<span class="built_in">list</span> --zookeeper david:<span class="number">2181</span>,david2:<span class="number">2181</span>
+</code></pre><p>显示结果：test</p>
+<p>kafka简介：<a href="https://en.wikipedia.org/wiki/Apache_Kafka" target="_blank" rel="external">https://en.wikipedia.org/wiki/Apache_Kafka</a><br><a href="http://kafka.apache.org/intro" target="_blank" rel="external">http://kafka.apache.org/intro</a><br>kafka镜像资源：<a href="http://www.apache.org/dyn/closer.cgi/kafka" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/kafka</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/" data-id="cix1j6c3x000w74uz36xgpy7o" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/" data-id="cix1j9k1s0000jwuz5icrevqo" class="article-share-link">Share</a>
       
-        <a href="http://www.daviddone.com/2015/10/12/Ubuntu使用crontab执行定时任务/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="http://www.daviddone.com/2015/08/12/kafka集群搭建教程/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -139,16 +132,40 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li></ul>
 
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/12/Storm集群搭建教程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Storm集群搭建教程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/07/12/node-快捷键/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">node++快捷键</div>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
-  
-  
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </section>
         
           <aside id="sidebar">
@@ -244,11 +261,13 @@ tail -<span class="keyword">n</span> 100 /<span class="keyword">var</span>/<span
 <script>
   var disqus_shortname = 'daviddone';
   
+  var disqus_url = 'http://www.daviddone.com/2015/08/12/kafka集群搭建教程/';
+  
   (function(){
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>
