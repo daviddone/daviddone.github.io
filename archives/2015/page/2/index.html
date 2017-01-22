@@ -125,7 +125,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="cix1jneth0000csuz1er7080s" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/06/10/搭建博客/" data-id="ciy8hi44n0000bcuz5vn9hbgt" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/06/10/搭建博客/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -188,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.daviddone.com/2015/05/13/如何掌握英文/" data-id="cix1jneui0009csuzif01qa5x" class="article-share-link">Share</a>
+      <a data-url="http://www.daviddone.com/2015/05/13/如何掌握英文/" data-id="ciy8hi45i0009bcuzwxlbuhj3" class="article-share-link">Share</a>
       
         <a href="http://www.daviddone.com/2015/05/13/如何掌握英文/#disqus_thread" class="article-comment-link">Comments</a>
 	<div id="disqus_thread"></div>
@@ -213,6 +213,87 @@
 
 
   
+    <article id="post-Elasticsearch集群方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/12/Elasticsearch集群方案/" class="article-date">
+  <time datetime="2015-05-12T03:05:29.000Z" itemprop="datePublished">2015-05-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Big-Data/">Big Data</a>►<a class="article-category-link" href="/categories/Big-Data/Elasticsearch/">Elasticsearch</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/12/Elasticsearch集群方案/">Storm集群搭建教程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Elasticsearch简介">Elasticsearch简介</h2><p>ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。<br>应用场景：github，wiki。携程的关键词搜索，58同城的搜索，海量数据搜索，并且要求毫秒级别的响应。</p>
+<h2 id="ElasticSearch安装">ElasticSearch安装</h2><h4 id="1_ElasticSearch解压">1 ElasticSearch解压</h4><pre><code><span class="tag">tar</span> <span class="tag">zxvf</span> <span class="tag">elasticsearch-2</span><span class="class">.2</span><span class="class">.0</span><span class="class">.tar</span><span class="class">.gz</span>
+</code></pre><h4 id="2_ElasticSearch修改配置">2 ElasticSearch修改配置</h4><p>修改config/elasticsearch.yml    (注意要顶格写，冒号后面要加一个空格)</p>
+<pre><code>a)cluster.name: chenkl   (同一集群要一样)
+b)node.name： david  (同一集群要不一样)
+c)network.Host: david   <span class="preprocessor"># 这里不能写<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,否则只能本机访问。这里配域名 ip均可</span>
+</code></pre><h4 id="3_创建ec用户">3 创建ec用户</h4><p>由于ElasticSearch不能采用root启动，所以必须用非root账户启动。这里创建ec用户。</p>
+<pre><code>useradd  <span class="keyword">ec</span>  # 创建<span class="keyword">ec</span>用户，默认存在同名组下，即<span class="keyword">ec</span>组
+passwd <span class="keyword">ec</span>  # 修改<span class="keyword">ec</span>用户的密码
+sudo  chown -R <span class="keyword">ec</span>  elasticsearch-<span class="number">2.2</span>.<span class="number">0</span>  # 修改文件夹权限
+</code></pre><h4 id="4_启动">4 启动</h4><pre><code>./bin/elasticsearch <span class="operator">-d</span>    <span class="comment"># 后台启动</span>
+</code></pre><h4 id="5_验证ElasticSearch">5 验证ElasticSearch</h4><pre><code>curl <span class="string">http:</span><span class="comment">//david:9200/</span>
+</code></pre><p><img src="/images/es1.png" style="margin-left:0px"><br>注意：关掉防火墙 </p>
+<h4 id="关闭elasticsearch">关闭elasticsearch</h4><pre><code>ps -ef | <span class="keyword">grep</span> elastic <span class="comment"># 找到进程</span>
+</code></pre><p><img src="/images/es2.png" style="margin-left:0px"></p>
+<pre><code>kill -<span class="number">9</span> <span class="number">3134</span>   ＃ 杀掉进程
+</code></pre><h2 id="ElasticSearch集群配置">ElasticSearch集群配置</h2><h4 id="1_分发es包">1 分发es包</h4><pre><code>scp -r elasticsearch-<span class="number">2.2</span>.<span class="number">0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david</span>
+</code></pre><h4 id="2_修改config/elasticsearch-yml">2 修改config/elasticsearch.yml</h4><p>a)cluster.name: chenkl   (同一集群要一样 保持原样)<br>b)node.name： david2  (同一集群要不一样)<br>c)network.Host: david2   # 这里不能写127.0.0.1,否则只能本机访问。这里配域名 ip均可</p>
+<h2 id="问题">问题</h2><p>Q：jvm内存不足 出现的错误</p>
+<pre><code>OpenJDK <span class="number">64</span>-Bit Server VM <span class="keyword">warning</span>: INFO: os::commit_memory(<span class="number">0x000000077ad30000</span>, <span class="number">2060255232</span>, <span class="number">0</span>) failed; <span class="keyword">error</span>=<span class="string">'Cannot allocate memory'</span> (errno=<span class="number">12</span>)
+# There is insufficient <span class="keyword">memory</span> <span class="keyword">for</span> the Java Runtime Environment to <span class="keyword">continue</span>.
+# /tmp/jvm-<span class="number">12496</span>/hs_error.<span class="keyword">log</span>
+</code></pre><p>A : 配置jvm的内存<br>es 2.2 可修改ES_HOME/bin/service/elasticsearch.conf，set.default.ES_HEAP_SIZE=1024，该值根据机器的配置可自定义。</p>
+<p>ElasticSearch官方网站   <a href="http://www.elasticsearch.org/download/" target="_blank" rel="external">http://www.elasticsearch.org/download/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.daviddone.com/2015/05/12/Elasticsearch集群方案/" data-id="ciy8hi494001rbcuzpkie752h" class="article-share-link">Share</a>
+      
+        <a href="http://www.daviddone.com/2015/05/12/Elasticsearch集群方案/#disqus_thread" class="article-comment-link">Comments</a>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'daviddone';
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/archives/2015/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><span class="page-number current">2</span>
@@ -226,7 +307,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Storm/">Storm</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/kafka/">kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/crontab/">crontab</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/">Big Data</a><span class="category-list-count">7</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Elasticsearch/">Elasticsearch</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/Storm/">Storm</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/kafka/">kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Big-Data/zookeeper/">zookeeper</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Database/">Database</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Database/Redis/">Redis</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/English/Methodology/">Methodology</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/crontab/">crontab</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/">Toolbox</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Toolbox/tools/">tools</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -235,7 +316,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Storm/">Storm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/">kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo教材/">Hexo教材</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Storm/">Storm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/">kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/标记二/">标记二</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -244,7 +325,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Storm/" style="font-size: 10px;">Storm</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
+      <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/Hexo教材/" style="font-size: 10px;">Hexo教材</a> <a href="/tags/Storm/" style="font-size: 10px;">Storm</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/markdown/" style="font-size: 20px;">markdown</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/标记二/" style="font-size: 10px;">标记二</a>
     </div>
   </div>
 
@@ -253,7 +334,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -296,7 +377,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 daviddone<br>
+      &copy; 2017 daviddone<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

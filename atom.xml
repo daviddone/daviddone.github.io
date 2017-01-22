@@ -505,4 +505,47 @@ redis_git_sha1:<span class="number">00000000</span>
     
   </entry>
   
+  <entry>
+    <title><![CDATA[Storm集群搭建教程]]></title>
+    <link href="http://www.daviddone.com/2015/05/12/Elasticsearch%E9%9B%86%E7%BE%A4%E6%96%B9%E6%A1%88/"/>
+    <id>http://www.daviddone.com/2015/05/12/Elasticsearch集群方案/</id>
+    <published>2015-05-12T03:05:29.000Z</published>
+    <updated>2017-01-22T09:50:22.829Z</updated>
+    <content type="html"><![CDATA[<h2 id="Elasticsearch简介">Elasticsearch简介</h2><p>ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。<br>应用场景：github，wiki。携程的关键词搜索，58同城的搜索，海量数据搜索，并且要求毫秒级别的响应。</p>
+<h2 id="ElasticSearch安装">ElasticSearch安装</h2><h4 id="1_ElasticSearch解压">1 ElasticSearch解压</h4><pre><code><span class="tag">tar</span> <span class="tag">zxvf</span> <span class="tag">elasticsearch-2</span><span class="class">.2</span><span class="class">.0</span><span class="class">.tar</span><span class="class">.gz</span>
+</code></pre><h4 id="2_ElasticSearch修改配置">2 ElasticSearch修改配置</h4><p>修改config/elasticsearch.yml    (注意要顶格写，冒号后面要加一个空格)</p>
+<pre><code>a)cluster.name: chenkl   (同一集群要一样)
+b)node.name： david  (同一集群要不一样)
+c)network.Host: david   <span class="preprocessor"># 这里不能写<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,否则只能本机访问。这里配域名 ip均可</span>
+</code></pre><h4 id="3_创建ec用户">3 创建ec用户</h4><p>由于ElasticSearch不能采用root启动，所以必须用非root账户启动。这里创建ec用户。</p>
+<pre><code>useradd  <span class="keyword">ec</span>  # 创建<span class="keyword">ec</span>用户，默认存在同名组下，即<span class="keyword">ec</span>组
+passwd <span class="keyword">ec</span>  # 修改<span class="keyword">ec</span>用户的密码
+sudo  chown -R <span class="keyword">ec</span>  elasticsearch-<span class="number">2.2</span>.<span class="number">0</span>  # 修改文件夹权限
+</code></pre><h4 id="4_启动">4 启动</h4><pre><code>./bin/elasticsearch <span class="operator">-d</span>    <span class="comment"># 后台启动</span>
+</code></pre><h4 id="5_验证ElasticSearch">5 验证ElasticSearch</h4><pre><code>curl <span class="string">http:</span><span class="comment">//david:9200/</span>
+</code></pre><p><img src="/images/es1.png" style="margin-left:0px"><br>注意：关掉防火墙 </p>
+<h4 id="关闭elasticsearch">关闭elasticsearch</h4><pre><code>ps -ef | <span class="keyword">grep</span> elastic <span class="comment"># 找到进程</span>
+</code></pre><p><img src="/images/es2.png" style="margin-left:0px"></p>
+<pre><code>kill -<span class="number">9</span> <span class="number">3134</span>   ＃ 杀掉进程
+</code></pre><h2 id="ElasticSearch集群配置">ElasticSearch集群配置</h2><h4 id="1_分发es包">1 分发es包</h4><pre><code>scp -r elasticsearch-<span class="number">2.2</span>.<span class="number">0</span> root<span class="variable">@david2</span><span class="symbol">:/home/david</span>
+</code></pre><h4 id="2_修改config/elasticsearch-yml">2 修改config/elasticsearch.yml</h4><p>a)cluster.name: chenkl   (同一集群要一样 保持原样)<br>b)node.name： david2  (同一集群要不一样)<br>c)network.Host: david2   # 这里不能写127.0.0.1,否则只能本机访问。这里配域名 ip均可</p>
+<h2 id="问题">问题</h2><p>Q：jvm内存不足 出现的错误</p>
+<pre><code>OpenJDK <span class="number">64</span>-Bit Server VM <span class="keyword">warning</span>: INFO: os::commit_memory(<span class="number">0x000000077ad30000</span>, <span class="number">2060255232</span>, <span class="number">0</span>) failed; <span class="keyword">error</span>=<span class="string">'Cannot allocate memory'</span> (errno=<span class="number">12</span>)
+# There is insufficient <span class="keyword">memory</span> <span class="keyword">for</span> the Java Runtime Environment to <span class="keyword">continue</span>.
+# /tmp/jvm-<span class="number">12496</span>/hs_error.<span class="keyword">log</span>
+</code></pre><p>A : 配置jvm的内存<br>es 2.2 可修改ES_HOME/bin/service/elasticsearch.conf，set.default.ES_HEAP_SIZE=1024，该值根据机器的配置可自定义。</p>
+<p>ElasticSearch官方网站   <a href="http://www.elasticsearch.org/download/" target="_blank" rel="external">http://www.elasticsearch.org/download/</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Elasticsearch简介">Elasticsearch简介</h2><p>ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，]]>
+    </summary>
+    
+      <category term="Elasticsearch" scheme="http://www.daviddone.com/tags/Elasticsearch/"/>
+    
+      <category term="Big Data" scheme="http://www.daviddone.com/categories/Big-Data/"/>
+    
+      <category term="Elasticsearch" scheme="http://www.daviddone.com/categories/Big-Data/Elasticsearch/"/>
+    
+  </entry>
+  
 </feed>
